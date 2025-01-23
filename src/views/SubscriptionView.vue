@@ -56,6 +56,6 @@ const selectPlan = (planName) => {
 };
 
 const isSelected = (planName) => selectedPlan.value === planName;
-import plansData from "../data/plansData";
+import plansData from "../data/plansData.js";
 const plans = ref(plansData);
 </script>

@@ -32,7 +32,7 @@
 
 <script setup>
 import { ref } from "vue";
-import newsData from "../data/newsData";
+import newsData from "../data/newsData.js";
 
 // NOTE: For testing
 // const news = [];

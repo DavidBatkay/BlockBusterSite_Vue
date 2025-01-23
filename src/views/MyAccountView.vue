@@ -1,6 +1,6 @@
 <script>
 import NewsSection from "../components/NewsSection.vue";
-import userData from "../data/userData";
+import userData from "../data/userData.js";
 export default {
   data() {
     return {

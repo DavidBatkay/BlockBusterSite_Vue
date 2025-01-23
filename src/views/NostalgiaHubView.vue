@@ -1,5 +1,5 @@
 <script>
-import movieList from "../data/movieData";
+import movieList from "../data/movieData.js";
 import MovieGrid from "../components/MovieGrid.vue";
 import YearFilter from "../components/YearFilter.vue";
 export default {
