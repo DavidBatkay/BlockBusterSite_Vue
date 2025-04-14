@@ -3,12 +3,12 @@ import { ref, computed, onMounted, watchEffect } from "vue"
 import Sidebar from "../components/Sidebar.vue"
 import MovieGrid from "../components/MovieGrid.vue"
 import SideToggle from "../components/SideToggle.vue"
-import movieList from "../data/movieData.js"
-
+import { useBlockbusterStore } from "../stores/useBlockbusterStore.js"
+const store = useBlockbusterStore()
 const screenWidth = ref(window.innerWidth)
 
-// Watch the window resize event to update the screen width
 onMounted(() => {
+  store.fetchMovies()
   window.addEventListener("resize", () => {
     screenWidth.value = window.innerWidth
   })
@@ -17,10 +17,10 @@ onMounted(() => {
 const moviesToShow = computed(() => {
   if (screenWidth.value >= 1280) {
     // Desktop (xl)
-    return movieList.slice(0, 5)
+    return store.movies.slice(0, 5)
   } else if (screenWidth.value >= 768) {
     // Tablet (md) and Phone (sm)
-    return movieList.slice(0, 6)
+    return store.movies.slice(0, 6)
   }
 })
 </script>

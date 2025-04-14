@@ -7,16 +7,33 @@ export const useBlockbusterStore = defineStore("movies", {
     loading: false,
     error: null,
     selectedMovie: {},
-    loggedIn: false
+    similarMovies: []
   }),
 
   actions: {
-    logOut() {
-      this.loggedIn = false
+    async getSimilarMovies(movieId) {
+      this.loading = true
+      this.error = null
+      try {
+        const res = await axios.get(`http://localhost:3000/api/movies`)
+        this.movies = res.data
+
+        const selected = this.movies.find(m => m.id === movieId)
+        if (!selected) throw new Error("Selected movie not found.")
+
+        this.selectedMovie = selected
+        const similar = this.movies.filter(
+          m => m.genre === selected.genre && m.id !== this.selectedMovie.id
+        )
+        this.similarMovies = similar.slice(0, 3)
+      } catch (err) {
+        console.error("Failed to fetch movie:", err)
+        this.error = "Failed to fetch movie. Please try again later."
+      } finally {
+        this.loading = false
+      }
     },
-    logIn() {
-      this.loggedIn = true
-    },
+
     async getRandomMovie() {
       this.loading = true
       this.error = null

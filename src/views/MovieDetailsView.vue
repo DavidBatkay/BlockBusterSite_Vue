@@ -65,8 +65,11 @@ onMounted(() => {
       <div
         class="w-full rounded-md border border-gray-300 bg-gray-100 p-4 sm:w-2/3 md:justify-center lg:w-1/3"
       >
-        <h3 class="mb-4 text-xl font-semibold">Similar Titles</h3>
-        <SimilarMovies />
+        <div class="flex justify-between">
+          <h3 class="mb-4 text-xl font-semibold">Similar Titles</h3>
+          <small>Genre: {{ store.selectedMovie.genre }}</small>
+        </div>
+        <SimilarMovies :movieId="route.params.id" />
       </div>
     </section>
   </main>

@@ -1,27 +1,37 @@
+<script setup>
+import { onMounted, ref } from "vue"
+import { useBlockbusterStore } from "../stores/useBlockbusterStore"
+const props = defineProps({
+  movieId: {
+    required: true
+  }
+})
+const handleClick = () => {
+  window.location.reload()
+}
+const store = useBlockbusterStore()
+const similarMovies = ref("")
+onMounted(async () => {
+  await store.getSimilarMovies(props.movieId)
+  similarMovies.value = store.similarMovies
+})
+</script>
+
 <template>
   <div class="flex gap-4">
     <router-link
+      v-if="similarMovies.length > 0"
+      :onclick="handleClick"
       v-for="(movie, index) in similarMovies"
       :key="index"
-      :to="`/moviedetails/#`"
+      :to="`/moviedetails/${movie.id}`"
       class="w-1/3"
     >
       <!-- NOTE :to="`/moviedetails/${movie.id}`" -->
-      <div class="w-full aspect-[3/4] bg-gray-300 rounded-md">
-        <img
-          :src="movie.image"
-          :alt="movie.title"
-          class="w-full h-full object-cover rounded-md"
-        />
+      <div class="aspect-[3/4] w-full rounded-md bg-gray-300">
+        <img :src="movie.image" :alt="movie.title" class="h-full w-full rounded-md object-cover" />
       </div>
     </router-link>
+    <p v-else>Sorry! We couldn't find similar titles</p>
   </div>
 </template>
-
-<script setup>
-const similarMovies = [
-  { id: 1, title: "Similar Movie 1", image: "path-to-image1.jpg" },
-  { id: 2, title: "Similar Movie 2", image: "path-to-image2.jpg" },
-  { id: 3, title: "Similar Movie 3", image: "path-to-image3.jpg" },
-];
-</script>

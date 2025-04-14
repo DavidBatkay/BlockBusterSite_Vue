@@ -1,9 +1,8 @@
 <script setup>
 import { useRouter } from "vue-router"
-import { useBlockbusterStore } from "../stores/useBlockbusterStore.js"
-import userData from "../data/userData.js"
+import { useUserStore } from "../stores/useUserStore.js"
 const router = useRouter()
-const store = useBlockbusterStore()
+const store = useUserStore()
 
 const navLinks = [
   { to: "/browse", fullText: "𝘽𝙍𝙊𝙒𝙎𝙀", shortText: "𝘽𝙍𝙊𝙒𝙎𝙀" },
@@ -11,7 +10,6 @@ const navLinks = [
   { to: "/nostalgiahub", fullText: "𝙉𝙊𝙎𝙏𝘼𝙇𝙂𝙄𝘼 𝙃𝙐𝘽", shortText: "𝙃𝙐𝘽" },
   { to: "/support", fullText: "𝙁𝘼𝙌 & 𝙎𝙐𝙋𝙋𝙊𝙍𝙏", shortText: "𝙁𝘼𝙌" }
 ]
-
 const logout = () => {
   store.logOut()
   router.push("/")
@@ -44,11 +42,11 @@ const logout = () => {
       <div
         class="-mr-4 ml-4 items-center sm:grid sm:grid-cols-1 sm:space-x-0 md:flex md:space-x-2 xl:space-x-4"
       >
-        <template v-if="store.loggedIn === true">
+        <template v-if="store.isLoggedIn">
           <!-- Profile Picture & Logout Button -->
           <router-link to="/myaccount" class="flex items-center space-x-2">
             <img
-              :src="userData.image"
+              :src="store.user.image"
               alt="User Avatar"
               class="h-8 w-8 rounded-full object-cover"
             />
@@ -56,7 +54,7 @@ const logout = () => {
           <button @click="logout" class="text-sm text-red-600 hover:underline">Log Out</button>
         </template>
 
-        <template v-if="store.loggedIn === false">
+        <template v-if="!store.isLoggedIn">
           <!-- Login & Sign Up Buttons -->
           <router-link to="/login">
             <button class="text-sm text-blue-600 hover:underline">Log In</button>

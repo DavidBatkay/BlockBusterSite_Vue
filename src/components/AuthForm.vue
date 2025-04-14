@@ -58,27 +58,33 @@
 <script setup>
 import { ref } from "vue"
 import { useRouter } from "vue-router"
-import { useBlockbusterStore } from "../stores/useBlockbusterStore"
+import { useUserStore } from "../stores/useUserStore"
+
 const props = defineProps({
   isSignup: Boolean
 })
-const store = useBlockbusterStore()
+
+const userStore = useUserStore()
 const email = ref("")
 const password = ref("")
 const confirmPassword = ref("")
 const router = useRouter()
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (props.isSignup) {
-    if (password.value === confirmPassword.value) {
-      store.logIn()
-      router.push("/myaccount")
+    if (password.value !== confirmPassword.value) {
+      alert("Passwords do not match.")
+      return
     }
+    await userStore.createUser(email.value, password.value)
   } else {
-    if (email.value && password.value) {
-      store.logIn()
-      router.push("/myaccount")
-    }
+    await userStore.fetchUser(email.value, password.value)
+  }
+
+  if (userStore.isLoggedIn) {
+    router.push("/myaccount")
+  } else {
+    alert(userStore.error || "Something went wrong.")
   }
 }
 </script>

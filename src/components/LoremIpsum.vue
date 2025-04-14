@@ -2,12 +2,15 @@
 defineProps({
   title: {
     required: false
+  },
+  text: {
+    required: false
   }
 })
 </script>
 <template>
   <h2 class="mb-4 text-lg font-bold md:text-xl">{{ title }}</h2>
-  <p class="text-xs text-gray-700 sm:text-sm">
+  <p v-if="!text" class="text-xs text-gray-700 sm:text-sm">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam quis efficitur enim. Aenean lacinia
     risus scelerisque eros convallis euismod. Suspendisse vitae scelerisque ipsum. Aliquam pulvinar,
     nunc a auctor sagittis, lorem sem semper orci, sodales pulvinar libero massa vel enim. Proin
@@ -21,4 +24,5 @@ defineProps({
     pretium aliquam ex id, cursus suscipit magna. Sed malesuada neque dignissim, hendrerit turpis
     blandit, commodo augue.
   </p>
+  <p v-else class="text-xs text-gray-700 sm:text-sm">{{ text }}</p>
 </template>
