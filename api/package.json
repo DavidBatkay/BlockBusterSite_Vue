@@ -1,0 +1,9 @@
+{
+  "name": "api",
+  "type": "module",
+  "packageManager": "yarn@4.5.1",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0"
+  }
+}
