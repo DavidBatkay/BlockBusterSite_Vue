@@ -1,4 +1,3 @@
-// stores/newsStore.js or newsStore.ts
 import { defineStore } from "pinia"
 import axios from "axios"
 

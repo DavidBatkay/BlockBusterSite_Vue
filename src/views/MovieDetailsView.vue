@@ -16,7 +16,7 @@ onMounted(() => {
   <main class="container mx-auto mt-6 flex-grow px-6">
     <section class="mb-8 h-auto w-full rounded-md bg-gray-300">
       <div
-        class="relative h-32 w-full rounded-md bg-gray-500 md:h-64"
+        class="relative h-32 w-full overflow-hidden rounded-md bg-gray-500 md:h-64"
         :style="
           store.selectedMovie?.image
             ? {
@@ -27,8 +27,10 @@ onMounted(() => {
             : {}
         "
       >
+        <div class="pointer-events-none absolute inset-0 z-0 bg-black opacity-40"></div>
+
         <div
-          class="absolute bottom-0 left-4 aspect-[3/4] h-20 w-16 rounded bg-gray-300 md:h-40 md:w-32"
+          class="absolute bottom-0 left-4 z-10 aspect-[3/4] h-20 w-16 rounded bg-gray-300 md:h-40 md:w-32"
         >
           <img
             v-if="store.selectedMovie?.image"
@@ -37,7 +39,10 @@ onMounted(() => {
             class="h-full w-full rounded object-cover"
           />
         </div>
-        <div class="absolute bottom-4 left-24 flex flex-row text-white sm:space-x-4 md:left-44">
+
+        <div
+          class="absolute bottom-4 left-24 z-10 flex flex-row text-white sm:space-x-4 md:left-44"
+        >
           <div class="flex flex-col items-start">
             <h1 class="text-lg font-semibold md:text-2xl">
               {{ store.selectedMovie?.title || "Loading..." }}
