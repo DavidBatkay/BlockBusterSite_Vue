@@ -10,9 +10,14 @@ const user = computed(() => store.user)
 
 const options = ["Billing Information", "Parental Controls", "Account Settings"]
 const modalMessage = ref("Select an option to view details.")
-
+const toDelete = ref(false)
 function showDetails(option) {
-  modalMessage.value = `Details about ${option} will go here.`
+  if (option === "Account Settings") {
+    toDelete.value = true
+    modalMessage.value = `DELETE ACCOUNT.`
+  } else {
+    modalMessage.value = `Details about ${option} will go here.`
+  }
 }
 </script>
 
@@ -46,6 +51,7 @@ function showDetails(option) {
 
     <section class="flex items-center justify-center rounded-lg bg-white p-6 shadow-md">
       <p class="text-gray-500 italic">{{ modalMessage }}</p>
+      {{ toDelete?<button></button>:"" }}
     </section>
 
     <NewsSection />

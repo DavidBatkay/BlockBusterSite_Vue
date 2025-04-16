@@ -11,6 +11,8 @@ let movies = [
     id: "1",
     image:
       "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_FMjpg_UX1000_.jpg",
+    thumbnail:
+      "https://a-static.besthdwallpaper.com/inception-movie-wallpaper-2560x1080-11690_14.jpg",
     title: "Inception",
     description:
       "A skilled thief enters dreams to steal secrets but faces a risky job: planting an idea in a target’s mind. As reality blurs, he navigates a maze of dreams within dreams to uncover the truth."
@@ -20,6 +22,7 @@ let movies = [
     id: "2",
     image:
       "https://m.media-amazon.com/images/M/MV5BYzdjMDAxZGItMjI2My00ODA1LTlkNzItOWFjMDU5ZDJlYWY3XkEyXkFqcGc@._V1_.jpg",
+
     title: "Interstellar",
     description:
       "In a dying Earth, a former pilot leads astronauts through a wormhole to find a new home for humanity. Time twists as they face cosmic challenges and personal sacrifices."
@@ -29,6 +32,8 @@ let movies = [
     id: "3",
     image:
       "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_FMjpg_UX1000_.jpg",
+    thumbnail:
+      "https://preview.redd.it/batman-color-removed-3440-x-1440-v0-i3fcm42jq89c1.png?width=1080&crop=smart&auto=webp&s=f598d757992fd9586a21e9b8c1e872678120a594",
     title: "The Dark Knight",
     description:
       "Batman battles the Joker, a chaotic criminal tearing Gotham apart. As the stakes rise, Bruce Wayne faces tough choices to protect the city from madness."
@@ -47,6 +52,7 @@ let movies = [
     id: "5",
     image:
       "https://m.media-amazon.com/images/M/MV5BN2NmN2VhMTQtMDNiOS00NDlhLTliMjgtODE2ZTY0ODQyNDRhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    thumbnail: "https://4kwallpapers.com/images/walls/thumbs_3t/15947.jpg",
     title: "The Matrix",
     description:
       "A hacker discovers reality is a simulation controlled by machines. Joining rebels, he fights to free humanity in a mind-bending world of action and illusion."

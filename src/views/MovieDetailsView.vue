@@ -18,13 +18,19 @@ onMounted(() => {
       <div
         class="relative h-32 w-full overflow-hidden rounded-md bg-gray-500 md:h-64"
         :style="
-          store.selectedMovie?.image
+          store.selectedMovie?.thumbnail
             ? {
-                backgroundImage: `url(${store.selectedMovie.image})`,
+                backgroundImage: `url(${store.selectedMovie.thumbnail})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center'
               }
-            : {}
+            : store.selectedMovie?.image
+              ? {
+                  backgroundImage: `url(${store.selectedMovie.image})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }
+              : {}
         "
       >
         <div class="pointer-events-none absolute inset-0 z-0 bg-black opacity-40"></div>
