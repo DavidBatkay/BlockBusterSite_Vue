@@ -178,6 +178,12 @@ api.get("/api/movies", (req, res) => {
   res.json(movies)
 })
 
+api.get("/api/movies/kids", (req, res) => {
+  const kidsMovies = movies.filter(movie => movie.genre.toLowerCase() === "animated")
+
+  res.status(200).json(kidsMovies)
+})
+
 api.get("/api/movies/random", (req, res) => {
   if (!movies || movies.length === 0) {
     return res.status(404).json({ error: "No movies available" })
@@ -224,9 +230,22 @@ let users = [
     email: "test@blockbuster.com",
     password: "123456",
     subscriptionPlan: "Free Plan",
-    image: "https://avatars.githubusercontent.com/u/146411522?v=4"
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEMzCoyblGoqPIHLfuITVfQ0Pe6snLXFxWpQ&s",
+    isKidsAccount: false
   }
 ]
+
+api.put("/api/user/parental", (req, res) => {
+  const { email, isKidsAccount } = req.body
+  const user = users.find(user => user.email === email)
+  if (!user) {
+    return res.status(404).json({ error: "User not found" })
+  }
+  user.isKidsAccount = isKidsAccount
+  res.status(200).json({ message: "Setting updated", user })
+})
+
 api.put("/api/user/subscription", (req, res) => {
   const { email, subscriptionPlan } = req.body
 
@@ -266,6 +285,7 @@ api.post("/api/user/register", (req, res) => {
     email,
     password,
     subscriptionPlan: "Free Plan",
+    isKidsAccount: false,
     image: getRandomImage()
   }
   users.push(newUser)

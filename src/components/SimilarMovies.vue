@@ -6,6 +6,16 @@ const props = defineProps({
     required: true
   }
 })
+watch(
+  () => props.movieId,
+  async (newId, oldId) => {
+    if (newId !== oldId) {
+      await store.getSimilarMovies(newId)
+      similarMovies.value = store.similarMovies
+    }
+  }
+)
+
 const emit = defineEmits(["movieIdChanged"])
 const handleClick = () => {
   emit("movieIdChanged")

@@ -39,7 +39,7 @@ export default {
         </div>
         <div>
           <LoremIpsum
-            text="Blockbuster has returned, reimagined for the digital age. Rising from nostalgic roots, it now offers a bold streaming platform focused on curated classics, rentals without subscriptions, and a fresh take on digital ownership. With a sleek interface and community-driven features, it appeals to both long-time fans and a new generation tired of endless scrolling. Partnering with indie studios and reviving the magic of movie nights, Blockbuster aims to blend old-school charm with modern convenience. No longer a relic, it positions itself as a real contender against streaming giants, ready to redefine home entertainment—again."
+            text="Blockbuster has returned, reimagined for the digital age. Rising from nostalgic roots, it now offers a bold streaming platform focused on curated classics, rentals replaced with subscriptions, and a fresh take on digital ownership. With a sleek interface and community-driven features, it appeals to both long-time fans and a new generation tired of endless scrolling. Partnering with indie studios and reviving the magic of movie nights, Blockbuster aims to blend old-school charm with modern convenience. No longer a relic, it positions itself as a real contender against streaming giants, ready to redefine home entertainment—again."
             title="What now?"
           />
         </div>

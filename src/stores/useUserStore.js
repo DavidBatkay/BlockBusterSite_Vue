@@ -3,7 +3,7 @@ import axios from "axios"
 
 export const useUserStore = defineStore("user", {
   state: () => ({
-    user: { subscriptionPlan: "", email: "", image: "" },
+    user: { subscriptionPlan: "", email: "", image: "", isKidsAccount: false },
     isLoggedIn: false,
     loading: false,
     error: null
@@ -12,6 +12,21 @@ export const useUserStore = defineStore("user", {
   actions: {
     logOut() {
       this.isLoggedIn = false
+    },
+    async toggleKidsAccount() {
+      this.loading = true
+      try {
+        const response = await axios.put("http://localhost:3000/api/user/parental", {
+          email: this.user.email,
+          isKidsAccount: !this.user.isKidsAccount
+        })
+        this.user.isKidsAccount = response.data.user.isKidsAccount
+        this.error = null
+      } catch (err) {
+        this.error = err.response?.data?.error || "Failed to update setting"
+      } finally {
+        this.loading = false
+      }
     },
     async updateUserPicture(newImageUrl) {
       this.loading = true

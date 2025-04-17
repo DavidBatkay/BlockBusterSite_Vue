@@ -59,11 +59,12 @@
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { useUserStore } from "../stores/useUserStore"
+import { useBlockbusterStore } from "../stores/useBlockbusterStore"
 
 const props = defineProps({
   isSignup: Boolean
 })
-
+const blockBusterStore = useBlockbusterStore()
 const userStore = useUserStore()
 const email = ref("")
 const password = ref("")
@@ -82,6 +83,7 @@ const handleSubmit = async () => {
   }
 
   if (userStore.isLoggedIn) {
+    blockBusterStore.isKidsAccount = userStore.user.isKidsAccount
     router.push("/myaccount")
   } else {
     alert(userStore.error || "Something went wrong.")

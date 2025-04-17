@@ -7,20 +7,21 @@ import { useBlockbusterStore } from "../stores/useBlockbusterStore"
 const route = useRoute()
 const store = useBlockbusterStore()
 const movieId = ref(route.params.id)
-const handleFetchMovie = () => {
-  store.fetchMovie(route.params.id)
+const handleFetchMovie = async () => {
+  await store.fetchMovie(route.params.id)
 }
 onMounted(() => {
   handleFetchMovie()
 })
 
 const handleMovieIdChanged = () => {
+  movieId.value = route.params.id
   handleFetchMovie()
 }
 </script>
 
 <template>
-  <main class="container mx-auto mt-6 flex-grow px-6">
+  <main v-if="!store.error" class="container mx-auto mt-6 flex-grow px-6">
     <section class="mb-8 h-auto w-full rounded-md bg-gray-300">
       <div
         class="relative h-32 w-full overflow-hidden rounded-md bg-gray-500 md:h-64"
@@ -88,8 +89,19 @@ const handleMovieIdChanged = () => {
           <small>Genre: {{ store.selectedMovie.genre }}</small>
         </div>
         <SimilarMovies :movieId="movieId" @movieIdChanged="handleMovieIdChanged" />
-        <!-- NOTE SimilarMovies does not rerender when emitting?? -->
       </div>
     </section>
+  </main>
+  <main v-else class="flex h-[80vh] items-center justify-center">
+    <div class="max-w-md rounded-lg border border-red-300 bg-red-100 p-6 text-center shadow-lg">
+      <h2 class="mb-2 text-2xl font-semibold text-red-700">Oops! Something went wrong</h2>
+      <p class="mb-4 text-red-600">
+        {{ store.error }}
+      </p>
+      <p class="text-sm text-red-500">
+        If this movie is restricted due to parental settings, you can update them in your account
+        settings to access more content.
+      </p>
+    </div>
   </main>
 </template>

@@ -5,7 +5,9 @@ import { useUserStore } from "../stores/useUserStore.js"
 import { ref } from "vue"
 import profileUrl from "../assets/profile3.png"
 import { useRouter } from "vue-router"
+import { useBlockbusterStore } from "../stores/useBlockbusterStore.js"
 const store = useUserStore()
+const blockBusterStore = useBlockbusterStore()
 
 const user = computed(() => store.user)
 const router = useRouter()
@@ -13,16 +15,26 @@ onMounted(() => {
   store.user.email === "" && router.push("/")
 })
 const options = ["Billing Information", "Parental Controls", "Account Settings"]
+const selectedOption = ref("")
 const modalMessage = ref("Select an option to view details.")
-const accountSettings = ref(false)
 const password = ref("")
+
+const activeSection = ref("") // will hold the current section
+const isSectionActive = section => activeSection.value === section
+
 function showDetails(option) {
-  if (option === "Account Settings") {
-    accountSettings.value = true
-  } else {
-    accountSettings.value = false
-  }
+  activeSection.value = option
   modalMessage.value = `${option}:`
+}
+
+const handleClick = option => {
+  selectedOption.value = option
+  showDetails(option)
+}
+
+const handleToggleParental = () => {
+  store.toggleKidsAccount()
+  blockBusterStore.isKidsAccount = !blockBusterStore.isKidsAccount
 }
 
 const handleDelete = async password => {
@@ -49,7 +61,7 @@ const handleUpdatePicture = async () => {
   }
   setTimeout(() => {
     newImageUrl.value = ""
-    modalMessage.value = ""
+    showDetails(selectedOption.value)
   }, 1000)
 }
 </script>
@@ -75,7 +87,7 @@ const handleUpdatePicture = async () => {
           v-for="option in options"
           :key="option"
           class="w-full px-6 py-3 text-left font-medium text-gray-800 transition-colors hover:bg-blue-50 hover:text-blue-600"
-          @click="showDetails(option)"
+          @click="handleClick(option)"
         >
           {{ option }}
         </button>
@@ -85,7 +97,10 @@ const handleUpdatePicture = async () => {
     <section class="flex flex-col items-center justify-center rounded-lg bg-white p-6 shadow-md">
       <p class="text-gray-500 italic">{{ modalMessage }}</p>
 
-      <div v-if="accountSettings" class="mt-4 flex w-full flex-col items-center gap-3">
+      <div
+        v-if="isSectionActive(`Account Settings`)"
+        class="mt-4 flex w-full flex-col items-center gap-3"
+      >
         <input
           v-model="newImageUrl"
           type="text"
@@ -111,6 +126,17 @@ const handleUpdatePicture = async () => {
           class="w-full max-w-xs rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
         >
           Delete
+        </button>
+      </div>
+      <div
+        v-if="isSectionActive(`Parental Controls`)"
+        class="mt-4 flex w-full flex-col items-center gap-3"
+      >
+        <button
+          @click="handleToggleParental"
+          class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        >
+          {{ store.user.isKidsAccount ? "Disable Kids Mode" : "Enable Kids Mode" }}
         </button>
       </div>
     </section>

@@ -54,17 +54,21 @@ const logout = () => {
           <button @click="logout" class="text-sm text-red-600 hover:underline">Log Out</button>
         </template>
 
-        <template v-if="!store.isLoggedIn">
+        <template v-if="!store.isLoggedIn" class="grid grid-cols-1 md:flex">
           <!-- Login & Sign Up Buttons -->
-          <router-link to="/login">
-            <button class="text-sm text-blue-600 hover:underline">Log In</button>
-          </router-link>
-          <router-link
-            to="/signup"
-            class="rounded bg-gradient-to-t from-blue-700 to-blue-400 text-sm text-yellow-300 hover:from-blue-700 hover:to-blue-700 sm:p-0 xl:px-4 xl:py-2 xl:font-bold"
+          <div
+            class="flex flex-col space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4"
           >
-            <span>Sign Up</span>
-          </router-link>
+            <router-link to="/login">
+              <button class="text-sm text-blue-600 hover:underline">Log In</button>
+            </router-link>
+            <router-link
+              to="/signup"
+              class="rounded bg-gradient-to-t from-blue-700 to-blue-400 text-sm text-yellow-300 hover:from-blue-700 hover:to-blue-700 sm:p-0 xl:px-4 xl:py-2 xl:font-bold"
+            >
+              <span>Sign Up</span>
+            </router-link>
+          </div>
         </template>
       </div>
     </div>
