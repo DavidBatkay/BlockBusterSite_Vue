@@ -39,7 +39,7 @@ const handleToggleParental = () => {
 
 const handleDelete = async password => {
   modalMessage.value = `Deleting account...`
-  accountSettings.value = false
+  activeSection.value = ""
   try {
     setTimeout(() => {
       store.deleteUser(password)
@@ -117,7 +117,7 @@ const handleUpdatePicture = async () => {
         <input
           v-model="password"
           type="password"
-          placeholder="Confirm password"
+          placeholder="Enter password to delete account"
           class="w-full max-w-xs rounded border border-gray-300 px-4 py-2 focus:border-red-500 focus:outline-none"
         />
 
@@ -132,12 +132,20 @@ const handleUpdatePicture = async () => {
         v-if="isSectionActive(`Parental Controls`)"
         class="mt-4 flex w-full flex-col items-center gap-3"
       >
-        <button
-          @click="handleToggleParental"
-          class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-        >
-          {{ store.user.isKidsAccount ? "Disable Kids Mode" : "Enable Kids Mode" }}
-        </button>
+        <div class="flex flex-row">
+          <p class="rounded px-4 py-2 text-black">Kids Mode:</p>
+          <button
+            @click="handleToggleParental"
+            class="rounded px-4 py-2 text-white"
+            :class="
+              store.user.isKidsAccount
+                ? `bg-green-500 hover:bg-green-600`
+                : `bg-red-500 hover:bg-red-600`
+            "
+          >
+            {{ store.user.isKidsAccount ? "ON" : "OFF" }}
+          </button>
+        </div>
       </div>
     </section>
 
