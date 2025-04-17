@@ -43,6 +43,7 @@ let movies = [
     id: "4",
     image:
       "https://m.media-amazon.com/images/M/MV5BMDEzMmQwZjctZWU2My00MWNlLWE0NjItMDJlYTRlNGJiZjcyXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    thumbnail: "https://i0.wp.com/jasonsmovieblog.com/wp-content/uploads/2022/12/TDyLzgA.jpg",
     title: "Avatar",
     description:
       "A Marine on the alien planet Pandora joins the Na’vi to protect their vibrant world from human greed. Stunning visuals bring this epic clash of cultures to life."
@@ -88,6 +89,8 @@ let movies = [
     id: "9",
     image:
       "https://m.media-amazon.com/images/M/MV5BNGE0YTVjNzUtNzJjOS00NGNlLTgxMzctZTY4YTE1Y2Y1ZTU4XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    thumbnail:
+      "https://4kwallpapers.com/images/wallpapers/avengers-hulk-thor-iron-man-captain-america-black-widow-2560x1080-1140.jpg",
     title: "The Avengers",
     description:
       "Earth’s mightiest heroes unite to stop Loki and an alien invasion. Iron Man, Thor, and others must team up to save the world from chaos."
@@ -237,6 +240,20 @@ api.put("/api/user/subscription", (req, res) => {
   res.status(200).json({ message: "Subscription updated", user })
 })
 
+api.put("/api/user/image", (req, res) => {
+  const { email, newImageUrl } = req.body.data
+
+  const user = users.find(user => user.email === email)
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" })
+  }
+
+  user.image = newImageUrl
+
+  res.status(200).json({ message: "Image updated", user })
+})
+
 api.post("/api/user/register", (req, res) => {
   const { email, password } = req.body
 
@@ -253,6 +270,24 @@ api.post("/api/user/register", (req, res) => {
   }
   users.push(newUser)
   res.status(201).json(newUser)
+})
+
+api.delete("/api/user/delete", (req, res) => {
+  const { email, password } = req.body
+
+  const userIndex = users.findIndex(user => user.email === email)
+  if (userIndex === -1) {
+    return res.status(404).json({ error: "User not found" })
+  }
+
+  const user = users[userIndex]
+  if (user.password !== password) {
+    return res.status(401).json({ error: "Incorrect password" })
+  }
+
+  users.splice(userIndex, 1)
+
+  return res.status(200).json({ message: "User deleted successfully" })
 })
 
 api.post("/api/user/login", (req, res) => {

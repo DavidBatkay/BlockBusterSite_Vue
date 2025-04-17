@@ -1,13 +1,14 @@
 <script setup>
-import { onMounted, ref } from "vue"
+import { onMounted, ref, watch } from "vue"
 import { useBlockbusterStore } from "../stores/useBlockbusterStore"
 const props = defineProps({
   movieId: {
     required: true
   }
 })
+const emit = defineEmits(["movieIdChanged"])
 const handleClick = () => {
-  window.location.reload()
+  emit("movieIdChanged")
 }
 const store = useBlockbusterStore()
 const similarMovies = ref("")

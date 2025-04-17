@@ -1,15 +1,22 @@
 <script setup>
-import { onMounted } from "vue"
+import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
 import SimilarMovies from "../components/SimilarMovies.vue"
 import { useBlockbusterStore } from "../stores/useBlockbusterStore"
 
 const route = useRoute()
 const store = useBlockbusterStore()
-
-onMounted(() => {
+const movieId = ref(route.params.id)
+const handleFetchMovie = () => {
   store.fetchMovie(route.params.id)
+}
+onMounted(() => {
+  handleFetchMovie()
 })
+
+const handleMovieIdChanged = () => {
+  handleFetchMovie()
+}
 </script>
 
 <template>
@@ -80,7 +87,8 @@ onMounted(() => {
           <h3 class="mb-4 text-xl font-semibold">Similar Titles</h3>
           <small>Genre: {{ store.selectedMovie.genre }}</small>
         </div>
-        <SimilarMovies :movieId="route.params.id" />
+        <SimilarMovies :movieId="movieId" @movieIdChanged="handleMovieIdChanged" />
+        <!-- NOTE SimilarMovies does not rerender when emitting?? -->
       </div>
     </section>
   </main>

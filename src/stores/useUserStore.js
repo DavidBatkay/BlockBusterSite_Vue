@@ -3,7 +3,7 @@ import axios from "axios"
 
 export const useUserStore = defineStore("user", {
   state: () => ({
-    user: { subscriptionPlan: "", email: "" },
+    user: { subscriptionPlan: "", email: "", image: "" },
     isLoggedIn: false,
     loading: false,
     error: null
@@ -13,6 +13,40 @@ export const useUserStore = defineStore("user", {
     logOut() {
       this.isLoggedIn = false
     },
+    async updateUserPicture(newImageUrl) {
+      this.loading = true
+      this.error = null
+      const email = this.user.email
+      try {
+        await axios.put(`http://localhost:3000/api/user/image`, {
+          data: { email, newImageUrl }
+        })
+        this.user.image = newImageUrl
+      } catch (err) {
+        console.error("Update failed:", err)
+        this.error = "Failed to update user image"
+      } finally {
+        this.loading = false
+      }
+    },
+    async deleteUser(password) {
+      this.loading = true
+      this.error = null
+      const email = this.user.email
+      try {
+        await axios.delete(`http://localhost:3000/api/user/delete`, {
+          data: { email, password }
+        })
+        this.user = null
+        this.logOut()
+      } catch (err) {
+        console.error("Delete failed:", err)
+        this.error = "Failed to delete user"
+      } finally {
+        this.loading = false
+      }
+    },
+
     async fetchUser(email, password) {
       this.loading = true
       this.error = null

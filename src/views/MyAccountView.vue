@@ -1,23 +1,56 @@
 <script setup>
-import { computed } from "vue"
+import { computed, onMounted } from "vue"
 import NewsSection from "../components/NewsSection.vue"
 import { useUserStore } from "../stores/useUserStore.js"
 import { ref } from "vue"
 import profileUrl from "../assets/profile3.png"
+import { useRouter } from "vue-router"
 const store = useUserStore()
 
 const user = computed(() => store.user)
-
+const router = useRouter()
+onMounted(() => {
+  store.user.email === "" && router.push("/")
+})
 const options = ["Billing Information", "Parental Controls", "Account Settings"]
 const modalMessage = ref("Select an option to view details.")
-const toDelete = ref(false)
+const accountSettings = ref(false)
+const password = ref("")
 function showDetails(option) {
   if (option === "Account Settings") {
-    toDelete.value = true
-    modalMessage.value = `DELETE ACCOUNT.`
+    accountSettings.value = true
   } else {
-    modalMessage.value = `Details about ${option} will go here.`
+    accountSettings.value = false
   }
+  modalMessage.value = `${option}:`
+}
+
+const handleDelete = async password => {
+  modalMessage.value = `Deleting account...`
+  accountSettings.value = false
+  try {
+    setTimeout(() => {
+      store.deleteUser(password)
+      router.push("/")
+    }, 1000)
+  } catch (err) {
+    console.error("Failed to delete user:", err)
+  }
+}
+const newImageUrl = ref("")
+const handleUpdatePicture = async () => {
+  modalMessage.value = "Updating account picture..."
+
+  try {
+    await store.updateUserPicture(newImageUrl.value)
+  } catch (error) {
+    modalMessage.value = "Update failed. Please try again."
+    console.error(error)
+  }
+  setTimeout(() => {
+    newImageUrl.value = ""
+    modalMessage.value = ""
+  }, 1000)
 }
 </script>
 
@@ -49,9 +82,37 @@ function showDetails(option) {
       </div>
     </section>
 
-    <section class="flex items-center justify-center rounded-lg bg-white p-6 shadow-md">
+    <section class="flex flex-col items-center justify-center rounded-lg bg-white p-6 shadow-md">
       <p class="text-gray-500 italic">{{ modalMessage }}</p>
-      {{ toDelete?<button></button>:"" }}
+
+      <div v-if="accountSettings" class="mt-4 flex w-full flex-col items-center gap-3">
+        <input
+          v-model="newImageUrl"
+          type="text"
+          placeholder="New image URL"
+          class="w-full max-w-xs rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+        />
+
+        <button
+          @click="handleUpdatePicture(newImageUrl)"
+          class="w-full max-w-xs rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+        >
+          Update Picture
+        </button>
+        <input
+          v-model="password"
+          type="password"
+          placeholder="Confirm password"
+          class="w-full max-w-xs rounded border border-gray-300 px-4 py-2 focus:border-red-500 focus:outline-none"
+        />
+
+        <button
+          @click="handleDelete(password)"
+          class="w-full max-w-xs rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
+        >
+          Delete
+        </button>
+      </div>
     </section>
 
     <NewsSection />
