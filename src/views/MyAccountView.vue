@@ -15,7 +15,6 @@ onMounted(() => {
   store.user.email === "" && router.push("/")
 })
 const options = ["Billing Information", "Parental Controls", "Account Settings"]
-const selectedOption = ref("")
 const modalMessage = ref("Select an option to view details.")
 const password = ref("")
 
@@ -23,12 +22,11 @@ const activeSection = ref("") // will hold the current section
 const isSectionActive = section => activeSection.value === section
 
 function showDetails(option) {
-  activeSection.value = option
   modalMessage.value = `${option}:`
 }
 
 const handleClick = option => {
-  selectedOption.value = option
+  activeSection.value = option
   showDetails(option)
 }
 
@@ -61,7 +59,7 @@ const handleUpdatePicture = async () => {
   }
   setTimeout(() => {
     newImageUrl.value = ""
-    showDetails(selectedOption.value)
+    showDetails(activeSection.value)
   }, 1000)
 }
 </script>
