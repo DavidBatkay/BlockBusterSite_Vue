@@ -9,7 +9,7 @@ const selectedPlan = ref(store.user.subscriptionPlan || "Free Plan")
 const error = ref("")
 
 const selectPlan = planName => {
-  if (store.isLoggedIn) {
+  if (store.isLoggedIn && store.user.cards.length > 0) {
     selectedPlan.value = planName
     store.updateSubscription(planName)
     localStorage.setItem("subscriptionPlan", planName)
@@ -17,6 +17,7 @@ const selectPlan = planName => {
   }
 }
 if (!store.isLoggedIn) error.value = "Log in to select plan"
+
 const isSelected = planName => {
   return selectedPlan.value === planName && store.isLoggedIn
 }
@@ -24,6 +25,7 @@ const isSelected = planName => {
 watchEffect(() => {
   if (store.isLoggedIn) {
     selectedPlan.value = store.user.subscriptionPlan || "Free Plan"
+    if (store.user.cards.length < 1) error.value = "Add card to select plan"
   }
 })
 </script>

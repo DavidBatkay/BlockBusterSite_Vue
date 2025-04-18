@@ -63,6 +63,8 @@ const handleSubmitCard = async () => {
 const handleDeleteCard = async number => {
   try {
     await store.deleteCard(number)
+    store.updateSubscription("Free Plan")
+    localStorage.setItem("subscriptionPlan", "Free Plan")
     await store.fetchCards()
   } catch (err) {
     console.error("Failed to delete card:", err)
