@@ -11,15 +11,63 @@ const blockBusterStore = useBlockbusterStore()
 
 const user = computed(() => store.user)
 const router = useRouter()
-onMounted(() => {
-  store.user.email === "" && router.push("/")
-})
 const options = ["Billing Information", "Parental Controls", "Account Settings"]
 const modalMessage = ref("Select an option to view details.")
 const password = ref("")
-
+const isEditingCard = ref("")
 const activeSection = ref("") // will hold the current section
 const isSectionActive = section => activeSection.value === section
+
+onMounted(async () => {
+  if (store.user.email === "") {
+    router.push("/")
+  } else {
+    await store.fetchCards()
+    console.log(store.user.cards)
+  }
+})
+const showAddForm = ref(false)
+const editingCard = ref(null)
+const form = ref({
+  number: "",
+  name: "",
+  expiration: "",
+  cvc: ""
+})
+
+const resetForm = () => {
+  isEditingCard.value = false
+  form.value = { number: "", name: "", expiration: "", cvc: "" }
+  editingCard.value = null
+  showAddForm.value = false
+}
+
+const editCard = card => {
+  isEditingCard.value = true
+  editingCard.value = card.number
+  form.value = { ...card }
+  showAddForm.value = true
+}
+
+const handleSubmitCard = async () => {
+  if (editingCard.value) {
+    await store.updateCard(editingCard.value, form.value)
+  } else {
+    await store.addCard(form.value)
+  }
+  await store.fetchCards()
+  isEditingCard.value = false
+  resetForm()
+}
+
+const handleDeleteCard = async number => {
+  try {
+    await store.deleteCard(number)
+    await store.fetchCards()
+  } catch (err) {
+    console.error("Failed to delete card:", err)
+  }
+}
 
 function showDetails(option) {
   modalMessage.value = `${option}:`
@@ -41,6 +89,7 @@ const handleDelete = async password => {
   try {
     setTimeout(() => {
       store.deleteUser(password)
+      blockBusterStore.isKidsAccount = false
       router.push("/")
     }, 1000)
   } catch (err) {
@@ -143,6 +192,181 @@ const handleUpdatePicture = async () => {
           >
             {{ store.user.isKidsAccount ? "ON" : "OFF" }}
           </button>
+        </div>
+      </div>
+      <div
+        v-if="isSectionActive(`Billing Information`)"
+        class="mt-4 flex w-full flex-col items-center gap-4"
+      >
+        <div
+          v-if="!isEditingCard"
+          v-for="(card, index) in store.user.cards"
+          :key="card.number"
+          class="w-full max-w-md rounded-lg bg-gradient-to-r from-gray-800 to-gray-900 p-6 text-white shadow-lg"
+        >
+          <div v-if="!editingCard || editingCard.number !== card.number">
+            <div class="relative">
+              <div class="mb-4 h-10 w-12 rounded bg-yellow-600"></div>
+              <p class="text-lg tracking-wider">
+                {{ card.number.replace(/(\d{4})(?=\d)/g, "$1 ") }}
+              </p>
+              <div class="mt-4 flex justify-between">
+                <div>
+                  <p class="text-sm">Cardholder</p>
+                  <p class="font-semibold">{{ card.name }}</p>
+                </div>
+                <div>
+                  <p class="text-sm">Expires</p>
+                  <p class="font-semibold">{{ card.expiration }}</p>
+                </div>
+                <div>
+                  <p class="text-sm">CVC</p>
+                  <p class="font-semibold">{{ card.cvc }}</p>
+                </div>
+              </div>
+              <div class="absolute top-0 right-0 h-8 w-12 rounded bg-gray-400 opacity-50"></div>
+            </div>
+            <div class="mt-4 flex justify-end gap-2">
+              <button @click="editCard(card)" class="text-blue-300 underline hover:text-blue-100">
+                Edit
+              </button>
+              <button
+                @click="handleDeleteCard(card.number)"
+                class="text-red-300 underline hover:text-red-100"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+          <form v-else @submit.prevent="handleSubmitCard" class="flex flex-col gap-3">
+            <input
+              v-model="form.number"
+              type="text"
+              placeholder="Card Number"
+              class="rounded border border-gray-600 bg-gray-700 px-4 py-2 text-lg tracking-wider text-white placeholder-gray-400"
+              required
+            />
+            <div class="mt-4 flex justify-between gap-2">
+              <div class="flex-1">
+                <p class="text-sm">Cardholder</p>
+                <input
+                  v-model="form.name"
+                  type="text"
+                  placeholder="Cardholder Name"
+                  class="w-full rounded border border-gray-600 bg-gray-700 px-4 py-2 text-white placeholder-gray-400"
+                  required
+                />
+              </div>
+              <div class="flex-1">
+                <p class="text-sm">Expires</p>
+                <input
+                  v-model="form.expiration"
+                  type="text"
+                  placeholder="Expiration (MM/YY)"
+                  class="w-full rounded border border-gray-600 bg-gray-700 px-4 py-2 text-white placeholder-gray-400"
+                  required
+                />
+              </div>
+              <div class="flex-1">
+                <p class="text-sm">CVC</p>
+                <input
+                  v-model="form.cvc"
+                  type="text"
+                  placeholder="CVC"
+                  class="w-full rounded border border-gray-600 bg-gray-700 px-4 py-2 text-white placeholder-gray-400"
+                  required
+                />
+              </div>
+            </div>
+            <div class="absolute top-6 right-6 h-8 w-12 rounded bg-gray-400 opacity-50"></div>
+            <div class="mt-4 flex justify-between">
+              <button
+                type="submit"
+                class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+              >
+                Save Changes
+              </button>
+              <button
+                @click="resetForm"
+                type="button"
+                class="rounded bg-gray-600 px-4 py-2 text-white hover:bg-gray-500"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <button
+          @click="showAddForm = true"
+          class="mt-4 w-full max-w-md rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+          v-if="!showAddForm"
+        >
+          Add Card
+        </button>
+
+        <div
+          v-if="showAddForm"
+          class="w-full max-w-md rounded-lg bg-gradient-to-r from-gray-800 to-gray-900 p-6 text-white shadow-lg"
+        >
+          <form @submit.prevent="handleSubmitCard" class="flex flex-col gap-3">
+            <div class="mb-4 h-10 w-12 rounded bg-yellow-600"></div>
+            <input
+              v-model="form.number"
+              type="text"
+              placeholder="Card Number"
+              class="rounded border border-gray-600 bg-gray-700 px-4 py-2 text-lg tracking-wider text-white placeholder-gray-400"
+              required
+            />
+            <div class="mt-4 flex justify-between gap-2">
+              <div class="flex-1">
+                <p class="text-sm">Cardholder</p>
+                <input
+                  v-model="form.name"
+                  type="text"
+                  placeholder="Cardholder Name"
+                  class="w-full rounded border border-gray-600 bg-gray-700 px-4 py-2 text-white placeholder-gray-400"
+                  required
+                />
+              </div>
+              <div class="flex-1">
+                <p class="text-sm">Expires</p>
+                <input
+                  v-model="form.expiration"
+                  type="text"
+                  placeholder="Expiration (MM/YY)"
+                  class="w-full rounded border border-gray-600 bg-gray-700 px-4 py-2 text-white placeholder-gray-400"
+                  required
+                />
+              </div>
+              <div class="flex-1">
+                <p class="text-sm">CVC</p>
+                <input
+                  v-model="form.cvc"
+                  type="text"
+                  placeholder="CVC"
+                  class="w-full rounded border border-gray-600 bg-gray-700 px-4 py-2 text-white placeholder-gray-400"
+                  required
+                />
+              </div>
+            </div>
+            <div class="absolute top-6 right-6 h-8 w-12 rounded bg-gray-400 opacity-50"></div>
+            <div class="mt-4 flex justify-between">
+              <button
+                type="submit"
+                class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+              >
+                Add Card
+              </button>
+              <button
+                @click="resetForm"
+                type="button"
+                class="rounded bg-gray-600 px-4 py-2 text-white hover:bg-gray-500"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </section>

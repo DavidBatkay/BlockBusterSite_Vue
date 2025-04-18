@@ -3,7 +3,13 @@ import axios from "axios"
 
 export const useUserStore = defineStore("user", {
   state: () => ({
-    user: { subscriptionPlan: "", email: "", image: "", isKidsAccount: false },
+    user: {
+      subscriptionPlan: "",
+      email: "",
+      image: "",
+      isKidsAccount: false,
+      cards: [{ number: "", name: "", expiration: "", cvc: "" }]
+    },
     isLoggedIn: false,
     loading: false,
     error: null
@@ -13,6 +19,72 @@ export const useUserStore = defineStore("user", {
     logOut() {
       this.isLoggedIn = false
     },
+    async fetchCards() {
+      try {
+        this.loading = true
+        const res = await axios.get("http://localhost:3000/api/user/cards", {
+          params: { email: this.user.email }
+        })
+        this.user.cards = res.data
+        this.error = null
+      } catch (err) {
+        this.error = err.response?.data?.error || "Failed to fetch cards"
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async addCard(card) {
+      try {
+        this.loading = true
+        const res = await axios.post("http://localhost:3000/api/user/card", {
+          email: this.user.email,
+          card
+        })
+        this.user.cards = res.data.cards
+        this.error = null
+      } catch (err) {
+        this.error = err.response?.data?.error || "Failed to add card"
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async updateCard(cardNumber, updatedCard) {
+      try {
+        this.loading = true
+        const res = await axios.put("http://localhost:3000/api/user/card/update", {
+          email: this.user.email,
+          cardNumber,
+          updatedCard
+        })
+        await this.fetchCards()
+        this.error = null
+      } catch (err) {
+        this.error = err.response?.data?.error || "Failed to update card"
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async deleteCard(cardNumber) {
+      try {
+        this.loading = true
+        const res = await axios.delete("http://localhost:3000/api/user/card/delete", {
+          data: {
+            email: this.user.email,
+            cardNumber
+          }
+        })
+        this.user.cards = res.data.cards
+        this.error = null
+      } catch (err) {
+        this.error = err.response?.data?.error || "Failed to delete card"
+      } finally {
+        this.loading = false
+      }
+    },
+
     async toggleKidsAccount() {
       this.loading = true
       try {

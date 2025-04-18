@@ -232,13 +232,60 @@ let users = [
     subscriptionPlan: "Free Plan",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEMzCoyblGoqPIHLfuITVfQ0Pe6snLXFxWpQ&s",
-    isKidsAccount: false
+    isKidsAccount: false,
+    cards: [{ number: "1234567890123456", name: "Block Buster", expiration: "12/26", cvc: "123" }]
   }
 ]
 
+// Helper: find user by email
+const findUser = email => users.find(u => u.email === email)
+
+api.get("/api/user/cards", (req, res) => {
+  const { email } = req.query
+  const user = findUser(email)
+  if (!user) return res.status(404).json({ error: "User not found" })
+  res.json(user.cards)
+})
+
+api.post("/api/user/card", (req, res) => {
+  const { email, card } = req.body
+  const user = findUser(email)
+  if (!user) return res.status(404).json({ error: "User not found" })
+
+  const exists = user.cards.some(c => c.number === card.number)
+  if (exists) return res.status(400).json({ error: "Card already exists" })
+
+  user.cards.push(card)
+  res.status(201).json({ message: "Card added", cards: user.cards })
+})
+
+api.put("/api/user/card/update", (req, res) => {
+  const { email, cardNumber, updatedCard } = req.body
+  const user = findUser(email)
+  if (!user) return res.status(404).json({ error: "User not found" })
+
+  const index = user.cards.findIndex(c => c.number === cardNumber)
+  if (index === -1) return res.status(404).json({ error: "Card not found" })
+
+  user.cards[index] = { ...user.cards[index], ...updatedCard }
+  res.json({ message: "Card updated", card: user.cards[index] })
+})
+
+api.delete("/api/user/card/delete", (req, res) => {
+  const { email, cardNumber } = req.body
+  const user = findUser(email)
+  if (!user) return res.status(404).json({ error: "User not found" })
+
+  const index = user.cards.findIndex(c => c.number === cardNumber)
+  if (index === -1) return res.status(404).json({ error: "Card not found" })
+
+  user.cards.splice(index, 1)
+  res.json({ message: "Card removed", cards: user.cards })
+})
+
 api.put("/api/user/parental", (req, res) => {
   const { email, isKidsAccount } = req.body
-  const user = users.find(user => user.email === email)
+  const user = findUser(email)
   if (!user) {
     return res.status(404).json({ error: "User not found" })
   }
@@ -249,7 +296,7 @@ api.put("/api/user/parental", (req, res) => {
 api.put("/api/user/subscription", (req, res) => {
   const { email, subscriptionPlan } = req.body
 
-  const user = users.find(user => user.email === email)
+  const user = findUser(email)
 
   if (!user) {
     return res.status(404).json({ error: "User not found" })
@@ -262,7 +309,7 @@ api.put("/api/user/subscription", (req, res) => {
 api.put("/api/user/image", (req, res) => {
   const { email, newImageUrl } = req.body.data
 
-  const user = users.find(user => user.email === email)
+  const user = findUser(email)
 
   if (!user) {
     return res.status(404).json({ error: "User not found" })
@@ -276,7 +323,7 @@ api.put("/api/user/image", (req, res) => {
 api.post("/api/user/register", (req, res) => {
   const { email, password } = req.body
 
-  const existingUser = users.find(user => user.email === email)
+  const existingUser = findUser(email)
   if (existingUser) {
     return res.status(409).json({ error: "User already exists" })
   }
@@ -286,7 +333,8 @@ api.post("/api/user/register", (req, res) => {
     password,
     subscriptionPlan: "Free Plan",
     isKidsAccount: false,
-    image: getRandomImage()
+    image: getRandomImage(),
+    cards: []
   }
   users.push(newUser)
   res.status(201).json(newUser)
