@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, watchEffect } from "vue"
+import { ref, computed, onMounted } from "vue"
 import Sidebar from "../components/Sidebar.vue"
 import MovieGrid from "../components/MovieGrid.vue"
 import SideToggle from "../components/SideToggle.vue"
@@ -9,6 +9,7 @@ const screenWidth = ref(window.innerWidth)
 
 onMounted(() => {
   store.fetchMovies()
+
   window.addEventListener("resize", () => {
     screenWidth.value = window.innerWidth
   })

@@ -7,7 +7,8 @@ export const useBlockbusterStore = defineStore("movies", {
     error: null,
     selectedMovie: {},
     similarMovies: [],
-    isKidsAccount: false
+    isKidsAccount: false,
+    selectedGenre: "all"
   }),
 
   actions: {
@@ -55,7 +56,6 @@ export const useBlockbusterStore = defineStore("movies", {
       try {
         const res = await axios.get(`http://localhost:3000/api/movies/${id}`)
         const movie = res.data
-        console.log(this.isKidsAccount && movie.genre !== "animated")
         if (this.isKidsAccount && movie.genre !== "animated") {
           this.selectedMovie = {}
           this.error = "Access denied: Not a kids-friendly movie."
@@ -75,7 +75,8 @@ export const useBlockbusterStore = defineStore("movies", {
       try {
         let res
         if (this.isKidsAccount) res = await axios.get("http://localhost:3000/api/movies/kids")
-        else res = await axios.get("http://localhost:3000/api/movies")
+        else res = await axios.get(`http://localhost:3000/api/movies?genre=${this.selectedGenre}`)
+
         this.movies = res.data
       } catch (err) {
         console.error("Failed to fetch movies:", err)

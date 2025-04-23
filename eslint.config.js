@@ -12,20 +12,8 @@ export default [
     languageOptions: { globals: globals.browser },
     rules: {
       "no-alert": "error",
-      "vue/v-on-event-hyphenation": [
-        "error",
-        "never",
-        {
-          autofix: true
-        }
-      ],
-      "vue/attribute-hyphenation": [
-        "error",
-        "never",
-        {
-          autofix: true
-        }
-      ]
+      "vue/v-on-event-hyphenation": ["error", "never"],
+      "vue/attribute-hyphenation": ["error", "never"]
     }
   },
   pluginPrettier

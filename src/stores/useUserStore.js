@@ -53,7 +53,7 @@ export const useUserStore = defineStore("user", {
     async updateCard(cardNumber, updatedCard) {
       try {
         this.loading = true
-        const res = await axios.put("http://localhost:3000/api/user/card/update", {
+        await axios.put("http://localhost:3000/api/user/card/update", {
           email: this.user.email,
           cardNumber,
           updatedCard

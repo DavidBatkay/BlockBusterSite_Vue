@@ -8,3 +8,6 @@ Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://
     GET: 6 endpoints
     PUT: 4 endpoints
     DELETE: 2 endpoints
+
+npx eslint --fix .
+npx prettier --write .

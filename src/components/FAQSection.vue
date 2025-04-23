@@ -1,22 +1,19 @@
 <template>
   <div class="mb-12">
-    <h1 class="text-4xl font-bold text-gray-800 text-center mb-8">FAQ</h1>
+    <h1 class="mb-8 text-center text-4xl font-bold text-gray-800">FAQ</h1>
     <div class="space-y-4 border-b pb-6">
       <div
         v-for="(faq, index) in faqs"
         :key="index"
-        class="border-gray-300 rounded-md border-2 hover:border-yellow-300"
+        class="rounded-md border-2 border-gray-300 hover:border-yellow-300"
       >
         <button
-          class="w-full text-left px-4 py-3 font-semibold text-gray-800 hover:bg-gradient-to-t from-blue-700 to-blue-400 rounded-md flex justify-between items-center"
+          class="flex w-full items-center justify-between rounded-md from-blue-700 to-blue-400 px-4 py-3 text-left font-semibold text-gray-800 hover:bg-gradient-to-t"
           @click="toggleFAQ(index)"
         >
           <span>{{ faq.question }}</span>
         </button>
-        <div
-          v-show="activeFAQ === index"
-          class="px-4 py-3 bg-white border-t border-gray-300"
-        >
+        <div v-show="activeFAQ === index" class="border-t border-gray-300 bg-white px-4 py-3">
           {{ faq.answer }}
         </div>
       </div>
@@ -25,15 +22,15 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref } from "vue"
 
 defineProps({
-  faqs: Array, // Expecting FAQ data to be passed as a prop
-});
+  faqs: Array // Expecting FAQ data to be passed as a prop
+})
 
-const activeFAQ = ref(null);
+const activeFAQ = ref(null)
 
-const toggleFAQ = (index) => {
-  activeFAQ.value = activeFAQ.value === index ? null : index;
-};
+const toggleFAQ = index => {
+  activeFAQ.value = activeFAQ.value === index ? null : index
+}
 </script>

@@ -23,7 +23,6 @@ onMounted(async () => {
     router.push("/")
   } else {
     await store.fetchCards()
-    console.log(store.user.cards)
   }
 })
 const showAddForm = ref(false)
@@ -203,7 +202,7 @@ const handleUpdatePicture = async () => {
         <div
           v-if="!isEditingCard"
           v-for="(card, index) in store.user.cards"
-          :key="card.number"
+          :key="index"
           class="w-full max-w-md rounded-lg bg-gradient-to-r from-gray-800 to-gray-900 p-6 text-white shadow-lg"
         >
           <div v-if="!editingCard || editingCard.number !== card.number">

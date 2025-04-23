@@ -11,13 +11,13 @@ const movieList = [
   {
     url: "./moviedetails",
     image: "movie10.jpg",
-    title: "Spider-Man 2",
+    title: "Spider-Man 2"
   },
   { url: "./moviedetails", image: "movie11.jpg", title: "Shrek" },
   { url: "./moviedetails", image: "movie12.jpg", title: "Toy Story" },
   { url: "./moviedetails", image: "movie13.jpg", title: "The Lion King" },
   { url: "./moviedetails", image: "movie14.jpg", title: "Frozen" },
-  { url: "./moviedetails", image: "movie15.jpg", title: "Finding Nemo" },
-];
+  { url: "./moviedetails", image: "movie15.jpg", title: "Finding Nemo" }
+]
 
-export default movieList;
+export default movieList

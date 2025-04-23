@@ -11,8 +11,7 @@ let movies = [
     id: "1",
     image:
       "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_FMjpg_UX1000_.jpg",
-    thumbnail:
-      "https://a-static.besthdwallpaper.com/inception-movie-wallpaper-2560x1080-11690_14.jpg",
+    thumbnail: "https://images.static-bluray.com/reviews/3549_1.jpg",
     title: "Inception",
     description:
       "A skilled thief enters dreams to steal secrets but faces a risky job: planting an idea in a target’s mind. As reality blurs, he navigates a maze of dreams within dreams to uncover the truth."
@@ -22,6 +21,8 @@ let movies = [
     id: "2",
     image:
       "https://m.media-amazon.com/images/M/MV5BYzdjMDAxZGItMjI2My00ODA1LTlkNzItOWFjMDU5ZDJlYWY3XkEyXkFqcGc@._V1_.jpg",
+    thumbnail:
+      "https://external-preview.redd.it/bq0Phy_hbuf2i1tdzclIFZD7b39zZ6Ltr_pRUrCiJvI.jpg?auto=webp&s=acd6847e49e03490909cdc8d6c1477297ed0404b",
 
     title: "Interstellar",
     description:
@@ -175,7 +176,15 @@ api.post("/api/form", (req, res) => {
 })
 //NOTE Movies api
 api.get("/api/movies", (req, res) => {
-  res.json(movies)
+  const genre = req.query.genre?.toLowerCase()
+
+  if (!genre || genre === "all") {
+    return res.status(200).json(movies)
+  }
+
+  const filtered = movies.filter(movie => movie.genre.toLowerCase() === genre)
+
+  res.status(200).json(filtered)
 })
 
 api.get("/api/movies/kids", (req, res) => {

@@ -1,16 +1,27 @@
 <script setup>
-import { onMounted, ref, computed } from "vue"
-import Sidebar from "../components/Sidebar.vue"
+import { onMounted, ref, computed, watch } from "vue"
 import MovieGridSide from "../components/MovieGridSide.vue"
 import SideToggle from "../components/SideToggle.vue"
 import CategoryList from "../components/CategoryList.vue"
 import CategoryListMobile from "../components/CategoryListMobile.vue"
 import { useBlockbusterStore } from "../stores/useBlockbusterStore.js"
+
 const store = useBlockbusterStore()
 const searchQuery = ref("")
+
 onMounted(() => {
   store.fetchMovies()
 })
+
+watch(
+  () => store.selectedGenre,
+  (newGenre, oldGenre) => {
+    if (newGenre !== oldGenre) {
+      store.fetchMovies()
+    }
+  }
+)
+
 const filteredMovies = computed(() => {
   if (!searchQuery.value) return store.movies
   const query = searchQuery.value.toLowerCase()
