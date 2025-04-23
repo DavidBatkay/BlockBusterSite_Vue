@@ -3,8 +3,10 @@ import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
 import SimilarMovies from "../components/SimilarMovies.vue"
 import { useBlockbusterStore } from "../stores/useBlockbusterStore"
+import { useUserStore } from "../stores/useUserStore"
 
 const route = useRoute()
+const userStore = useUserStore()
 const store = useBlockbusterStore()
 const movieId = ref(route.params.id)
 const handleFetchMovie = async () => {
@@ -62,11 +64,13 @@ const handleMovieIdChanged = () => {
               {{ store.selectedMovie?.title || "Loading..." }}
             </h1>
           </div>
-          <router-link to="#" class="ml-5 flex flex-col items-start">
+          <router-link :to="userStore.isLoggedIn ? `#` : ``" class="ml-5 flex flex-col items-start">
             <button
               class="rounded-md border-[3px] border-transparent bg-blue-600 from-blue-700 to-blue-400 p-1 px-4 py-2 text-xs font-bold text-white hover:border-yellow-300 hover:bg-gradient-to-t hover:text-yellow-300"
+              :disabled="!userStore.isLoggedIn"
+              :class="!userStore.isLoggedIn ? `cursor-not-allowed` : ``"
             >
-              Watch Now
+              {{ userStore.isLoggedIn ? "Watch Now" : "Log in to watch" }}
             </button>
           </router-link>
         </div>
