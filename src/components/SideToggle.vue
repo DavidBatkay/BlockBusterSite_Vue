@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center space-x-4 lg:justify-start">
+  <div id="side-toggle" class="flex justify-center space-x-4 lg:justify-start">
     <button
       v-for="(button, index) in buttons"
       :key="index"

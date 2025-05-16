@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="news-section">
     <section class="mb-6 rounded-lg bg-white p-6 shadow-md">
       <h2 class="text-center text-lg font-semibold">Blockbuster News and Updates</h2>
     </section>

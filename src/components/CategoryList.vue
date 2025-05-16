@@ -14,11 +14,12 @@
 </template>
 
 <script setup>
-import { onUnmounted } from "vue"
+import { onBeforeUnmount } from "vue"
 import { useBlockbusterStore } from "../stores/useBlockbusterStore"
-onUnmounted(() => {
+onBeforeUnmount(() => {
   store.selectedGenre = "all"
 })
+
 const store = useBlockbusterStore()
 
 const handleClick = genre => {

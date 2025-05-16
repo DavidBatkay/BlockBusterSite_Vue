@@ -18,6 +18,7 @@ export const useUserStore = defineStore("user", {
   actions: {
     logOut() {
       this.isLoggedIn = false
+      this.isKidsAccount = false
     },
     async fetchCards() {
       try {

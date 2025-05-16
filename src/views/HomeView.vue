@@ -23,6 +23,7 @@ const moviesToShow = computed(() => {
     // Tablet (md) and Phone (sm)
     return store.movies.slice(0, 6)
   }
+  return store.movies
 })
 </script>
 

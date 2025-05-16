@@ -1,8 +1,6 @@
 <script setup>
 import Header from "./components/Header.vue"
 import Footer from "./components/Footer.vue"
-import { useBlockbusterStore } from "./stores/useBlockbusterStore"
-const store = useBlockbusterStore()
 </script>
 
 <template>

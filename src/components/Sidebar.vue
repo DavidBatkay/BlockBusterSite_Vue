@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section id="sidebar">
     <router-link :to="'/moviedetails/' + store.selectedMovie.id">
       <div
         class="relative flex h-40 items-center justify-center overflow-hidden rounded bg-gray-200 opacity-100 md:h-72 xl:mx-20"

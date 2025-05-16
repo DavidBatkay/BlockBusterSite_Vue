@@ -14,8 +14,8 @@
 <script setup>
 import { useRouter } from "vue-router"
 import { useBlockbusterStore } from "../stores/useBlockbusterStore"
-import { onUnmounted } from "vue"
-onUnmounted(() => {
+import { onBeforeUnmount } from "vue"
+onBeforeUnmount(() => {
   store.selectedGenre = "all"
 })
 
