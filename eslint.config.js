@@ -16,5 +16,18 @@ export default [
       "vue/attribute-hyphenation": ["error", "never"]
     }
   },
+  {
+    files: ["cypress/**/*.js"],
+    languageOptions: {
+      globals: {
+        ...globals.mocha, // adds describe, it, before, etc.
+        ...globals.browser, // adds window, document, etc.
+        cy: "readonly" // adds Cypress's global cy object
+      }
+    },
+    rules: {
+      "no-undef": "off" // suppress 'not defined'
+    }
+  },
   pluginPrettier
 ]
