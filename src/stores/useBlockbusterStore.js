@@ -1,5 +1,6 @@
 import { defineStore } from "pinia"
 import axios from "axios"
+const url = import.meta.env.VITE_API_BASE_URL
 export const useBlockbusterStore = defineStore("movies", {
   state: () => ({
     movies: [],
@@ -16,7 +17,7 @@ export const useBlockbusterStore = defineStore("movies", {
       this.loading = true
       this.error = null
       try {
-        const res = await axios.get(`http://localhost:3000/api/movies`)
+        const res = await axios.get(`${url}/api/movies`)
         this.movies = res.data
 
         const selected = this.movies.find(m => m.id === movieId)
@@ -40,7 +41,7 @@ export const useBlockbusterStore = defineStore("movies", {
       this.error = null
 
       try {
-        const res = await axios.get(`http://localhost:3000/api/movies/random`)
+        const res = await axios.get(`${url}/api/movies/random`)
         this.selectedMovie = res.data
       } catch (err) {
         console.error("Failed to fetch movie:", err)
@@ -54,7 +55,7 @@ export const useBlockbusterStore = defineStore("movies", {
       this.error = null
 
       try {
-        const res = await axios.get(`http://localhost:3000/api/movies/${id}`)
+        const res = await axios.get(`${url}/api/movies/${id}`)
         const movie = res.data
         if (this.isKidsAccount && movie.genre !== "animated") {
           this.selectedMovie = {}
@@ -74,8 +75,8 @@ export const useBlockbusterStore = defineStore("movies", {
 
       try {
         let res
-        if (this.isKidsAccount) res = await axios.get("http://localhost:3000/api/movies/kids")
-        else res = await axios.get(`http://localhost:3000/api/movies?genre=${this.selectedGenre}`)
+        if (this.isKidsAccount) res = await axios.get(`${url}/api/movies/kids`)
+        else res = await axios.get(`${url}/api/movies?genre=${this.selectedGenre}`)
 
         this.movies = res.data
       } catch (err) {

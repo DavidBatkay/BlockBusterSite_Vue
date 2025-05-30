@@ -1,5 +1,6 @@
 import { defineStore } from "pinia"
 import axios from "axios"
+const url = import.meta.env.VITE_API_BASE_URL
 
 export const useContactStore = defineStore("contact", {
   state: () => ({}),
@@ -7,10 +8,9 @@ export const useContactStore = defineStore("contact", {
   actions: {
     async sendForm(formData) {
       try {
-        await axios.post("http://localhost:3000/api/form", formData)
+        await axios.post(`${url}/api/form`, formData)
       } catch (err) {
         console.error("Failed to send form:", err)
-      } finally {
       }
     }
   }

@@ -2,8 +2,14 @@
   "name": "api",
   "type": "module",
   "packageManager": "yarn@4.5.1",
+  "scripts": {
+    "dev": "node api-express.js",
+    "db-sync": "node db-sync.js"
+  },
   "dependencies": {
     "body-parser": "^2.2.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mysql2": "^3.14.1",
+    "sequelize": "^6.37.7"
   }
 }

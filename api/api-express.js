@@ -223,6 +223,25 @@ api.get("/api/news", (req, res) => {
   res.json(newsData)
 })
 
+// POST route to add news (admin only)
+api.post("/api/news", (req, res) => {
+  const { title, content } = req.body
+
+  if (!title || !content) {
+    return res.status(400).json({ error: "Title and content are required." })
+  }
+
+  // Add to front of the array
+  newsData.unshift({ title, content })
+
+  // Keep only the 3 most recent
+  if (newsData.length > 3) {
+    newsData.length = 3
+  }
+
+  res.json({ success: true, news: newsData })
+})
+
 //NOTE User api
 function getRandomImage() {
   const images = [
@@ -242,6 +261,7 @@ let users = [
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEMzCoyblGoqPIHLfuITVfQ0Pe6snLXFxWpQ&s",
     isKidsAccount: false,
+    isAdmin: true,
     cards: [{ number: "1234567890123456", name: "Block Buster", expiration: "12/26", cvc: "123" }]
   }
 ]
@@ -342,6 +362,7 @@ api.post("/api/user/register", (req, res) => {
     password,
     subscriptionPlan: "Free Plan",
     isKidsAccount: false,
+    isAdmin: false,
     image: getRandomImage(),
     cards: []
   }

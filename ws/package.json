@@ -1,0 +1,11 @@
+{
+  "name": "api",
+  "type": "module",
+  "packageManager": "yarn@4.5.1",
+  "scripts": {
+    "dev": "node ws-server.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.2"
+  }
+}

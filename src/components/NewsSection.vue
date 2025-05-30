@@ -19,6 +19,9 @@
           <p class="text-sm text-gray-600">{{ item.content }}</p>
         </li>
       </ul>
+      <div v-if="userStore.user?.isAdmin">
+        <NewsForm />
+      </div>
     </section>
   </div>
 </template>
@@ -26,9 +29,11 @@
 <script setup>
 import { onMounted } from "vue"
 import { useNewsStore } from "../stores/useNewsStore"
+import { useUserStore } from "../stores/useUserStore"
+import NewsForm from "./NewsForm.vue"
 
 const newsStore = useNewsStore()
-
+const userStore = useUserStore()
 onMounted(() => {
   newsStore.fetchNews()
 })

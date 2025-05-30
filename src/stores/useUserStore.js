@@ -1,5 +1,6 @@
 import { defineStore } from "pinia"
 import axios from "axios"
+const url = import.meta.env.VITE_API_BASE_URL
 
 export const useUserStore = defineStore("user", {
   state: () => ({
@@ -8,7 +9,8 @@ export const useUserStore = defineStore("user", {
       email: "",
       image: "",
       isKidsAccount: false,
-      cards: [{ number: "", name: "", expiration: "", cvc: "" }]
+      cards: [{ number: "", name: "", expiration: "", cvc: "" }],
+      isAdmin: false
     },
     isLoggedIn: false,
     loading: false,
@@ -23,7 +25,7 @@ export const useUserStore = defineStore("user", {
     async fetchCards() {
       try {
         this.loading = true
-        const res = await axios.get("http://localhost:3000/api/user/cards", {
+        const res = await axios.get(`${url}/api/user/cards`, {
           params: { email: this.user.email }
         })
         this.user.cards = res.data
@@ -38,7 +40,7 @@ export const useUserStore = defineStore("user", {
     async addCard(card) {
       try {
         this.loading = true
-        const res = await axios.post("http://localhost:3000/api/user/card", {
+        const res = await axios.post(`${url}/api/user/card`, {
           email: this.user.email,
           card
         })
@@ -54,7 +56,7 @@ export const useUserStore = defineStore("user", {
     async updateCard(cardNumber, updatedCard) {
       try {
         this.loading = true
-        await axios.put("http://localhost:3000/api/user/card/update", {
+        await axios.put(`${url}/api/user/card/update`, {
           email: this.user.email,
           cardNumber,
           updatedCard
@@ -71,7 +73,7 @@ export const useUserStore = defineStore("user", {
     async deleteCard(cardNumber) {
       try {
         this.loading = true
-        const res = await axios.delete("http://localhost:3000/api/user/card/delete", {
+        const res = await axios.delete(`${url}/api/user/card/delete`, {
           data: {
             email: this.user.email,
             cardNumber
@@ -89,7 +91,7 @@ export const useUserStore = defineStore("user", {
     async toggleKidsAccount() {
       this.loading = true
       try {
-        const response = await axios.put("http://localhost:3000/api/user/parental", {
+        const response = await axios.put(`${url}/api/user/parental`, {
           email: this.user.email,
           isKidsAccount: !this.user.isKidsAccount
         })
@@ -106,7 +108,7 @@ export const useUserStore = defineStore("user", {
       this.error = null
       const email = this.user.email
       try {
-        await axios.put(`http://localhost:3000/api/user/image`, {
+        await axios.put(`${url}/api/user/image`, {
           data: { email, newImageUrl }
         })
         this.user.image = newImageUrl
@@ -122,7 +124,7 @@ export const useUserStore = defineStore("user", {
       this.error = null
       const email = this.user.email
       try {
-        await axios.delete(`http://localhost:3000/api/user/delete`, {
+        await axios.delete(`${url}/api/user/delete`, {
           data: { email, password }
         })
         this.user = null
@@ -139,7 +141,7 @@ export const useUserStore = defineStore("user", {
       this.loading = true
       this.error = null
       try {
-        const res = await axios.post("http://localhost:3000/api/user/login", {
+        const res = await axios.post(`${url}/api/user/login`, {
           email,
           password
         })
@@ -158,7 +160,7 @@ export const useUserStore = defineStore("user", {
       this.loading = true
       this.error = null
       try {
-        const res = await axios.post("http://localhost:3000/api/user/register", {
+        const res = await axios.post(`${url}/api/user/register`, {
           email,
           password
         })
@@ -176,7 +178,7 @@ export const useUserStore = defineStore("user", {
       this.loading = true
       this.error = null
       try {
-        const res = await axios.put("http://localhost:3000/api/user/subscription", {
+        const res = await axios.put(`${url}/api/user/subscription`, {
           email: this.user.email,
           subscriptionPlan: newPlan
         })
