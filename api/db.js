@@ -1,69 +1,47 @@
-import { Sequelize } from "sequelize"
+import { Sequelize, DataTypes } from "sequelize"
 
-const db = {
-  NAME: "blockbuster",
-  USERNAME: "blockbuster",
-  PASSWORD: "blockbuster",
+export const sequelize = new Sequelize("blockbuster", "blockbuster", "blockbuster", {
+  host: "mysql.blockbuster",
+  port: 3306,
+  dialect: "mysql",
+  timezone: "+00:00",
+  logging: console.log
+})
 
-  options: {
-    dialect: "mysql",
-    timezone: "+00:00",
-    host: "mysql.blockbuster",
-    port: 3306,
-    logging: function (str) {
-      console.log(str)
-    }
-  }
-}
+export const User = sequelize.define("User", {
+  email: DataTypes.STRING,
+  password: DataTypes.STRING,
+  subscriptionPlan: DataTypes.STRING,
+  image: DataTypes.STRING,
+  isKidsAccount: DataTypes.BOOLEAN,
+  isAdmin: DataTypes.BOOLEAN
+})
 
-export const sequelize = new Sequelize(db.NAME, db.USERNAME, db.PASSWORD, db.options)
+export const Card = sequelize.define("Card", {
+  number: DataTypes.STRING,
+  name: DataTypes.STRING,
+  expiration: DataTypes.STRING,
+  cvc: DataTypes.STRING
+})
 
-export const Card = sequelize.define("Card", {})
+export const Movie = sequelize.define("Movie", {
+  title: DataTypes.STRING,
+  genre: DataTypes.STRING,
+  image: DataTypes.STRING,
+  thumbnail: DataTypes.STRING,
+  description: DataTypes.TEXT
+})
 
-export const User = sequelize.define("User", {})
+export const News = sequelize.define("News", {
+  title: DataTypes.STRING,
+  content: DataTypes.TEXT
+})
 
-export const Movie = sequelize.define("Movie", {})
-// export const List = sequelize.define(
-//   "List",
-//   {
-//     name: {
-//       type: DataTypes.STRING,
-//       allowNull: false,
-//       validate: {
-//         notEmpty: true
-//       }
-//     }
-//   },
-//   {
-//     sequelize,
-//     freezeTableName: true,
-//     paranoid: true
-//   }
-// )
+export const ContactForm = sequelize.define("ContactForm", {
+  name: DataTypes.STRING,
+  email: DataTypes.STRING,
+  message: DataTypes.TEXT
+})
 
-// export const Task = sequelize.define(
-//   "Task",
-//   {
-//     name: {
-//       type: DataTypes.STRING,
-//       allowNull: false,
-//       validate: {
-//         notEmpty: true
-//       }
-//     },
-//     color: {
-//       type: DataTypes.STRING,
-//       allowNull: true
-//     }
-//   },
-//   {
-//     sequelize,
-//     freezeTableName: true,
-//     paranoid: true
-//   }
-// )
-
-// List.hasMany(Task)
-// Task.belongsTo(List)
 User.hasMany(Card)
 Card.belongsTo(User)

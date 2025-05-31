@@ -4,7 +4,8 @@
   "packageManager": "yarn@4.5.1",
   "scripts": {
     "dev": "node api-express.js",
-    "db-sync": "node db-sync.js"
+    "db-sync": "node db-sync.js",
+    "db-seed": "node seed.js"
   },
   "dependencies": {
     "body-parser": "^2.2.0",

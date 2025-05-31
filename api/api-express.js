@@ -1,158 +1,12 @@
-// api.js (Express setup)
 import express from "express"
 import bodyParser from "body-parser"
+import { sequelize, User, Card, Movie, News, ContactForm } from "./db.js"
 
 const api = express()
 const port = 3000
 
-let movies = [
-  {
-    genre: "action",
-    id: "1",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_FMjpg_UX1000_.jpg",
-    thumbnail: "https://images.static-bluray.com/reviews/3549_1.jpg",
-    title: "Inception",
-    description:
-      "A skilled thief enters dreams to steal secrets but faces a risky job: planting an idea in a target’s mind. As reality blurs, he navigates a maze of dreams within dreams to uncover the truth."
-  },
-  {
-    genre: "thriller",
-    id: "2",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BYzdjMDAxZGItMjI2My00ODA1LTlkNzItOWFjMDU5ZDJlYWY3XkEyXkFqcGc@._V1_.jpg",
-    thumbnail:
-      "https://external-preview.redd.it/bq0Phy_hbuf2i1tdzclIFZD7b39zZ6Ltr_pRUrCiJvI.jpg?auto=webp&s=acd6847e49e03490909cdc8d6c1477297ed0404b",
-
-    title: "Interstellar",
-    description:
-      "In a dying Earth, a former pilot leads astronauts through a wormhole to find a new home for humanity. Time twists as they face cosmic challenges and personal sacrifices."
-  },
-  {
-    genre: "action",
-    id: "3",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_FMjpg_UX1000_.jpg",
-    thumbnail:
-      "https://preview.redd.it/batman-color-removed-3440-x-1440-v0-i3fcm42jq89c1.png?width=1080&crop=smart&auto=webp&s=f598d757992fd9586a21e9b8c1e872678120a594",
-    title: "The Dark Knight",
-    description:
-      "Batman battles the Joker, a chaotic criminal tearing Gotham apart. As the stakes rise, Bruce Wayne faces tough choices to protect the city from madness."
-  },
-  {
-    genre: "sci-fi",
-    id: "4",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BMDEzMmQwZjctZWU2My00MWNlLWE0NjItMDJlYTRlNGJiZjcyXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
-    thumbnail: "https://i0.wp.com/jasonsmovieblog.com/wp-content/uploads/2022/12/TDyLzgA.jpg",
-    title: "Avatar",
-    description:
-      "A Marine on the alien planet Pandora joins the Na’vi to protect their vibrant world from human greed. Stunning visuals bring this epic clash of cultures to life."
-  },
-  {
-    genre: "action",
-    id: "5",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BN2NmN2VhMTQtMDNiOS00NDlhLTliMjgtODE2ZTY0ODQyNDRhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
-    thumbnail: "https://4kwallpapers.com/images/walls/thumbs_3t/15947.jpg",
-    title: "The Matrix",
-    description:
-      "A hacker discovers reality is a simulation controlled by machines. Joining rebels, he fights to free humanity in a mind-bending world of action and illusion."
-  },
-  {
-    genre: "adventure",
-    id: "6",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BMjM2MDgxMDg0Nl5BMl5BanBnXkFtZTgwNTM2OTM5NDE@._V1_.jpg",
-    title: "Jurassic Park",
-    description:
-      "Scientists bring dinosaurs back to life on a remote island park. When the creatures break free, a group fights to survive amid prehistoric chaos."
-  },
-  {
-    genre: "animated",
-    id: "7",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BYzdjY2VmZDgtMWFlOS00NjAyLWIyYzQtMjNjNzY3YTgxODRjXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
-    title: "Bakugan Battle Brawlers",
-    description:
-      "Kids wield powerful creatures called Bakugan in thrilling card battles. Dan and his friends uncover a deeper mystery as their games impact two worlds."
-  },
-  {
-    genre: "drama",
-    id: "8",
-    image: "http://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg",
-    title: "Titanic",
-    description:
-      "A young artist and an aristocrat fall in love aboard the doomed Titanic. Their romance unfolds against the backdrop of the ship’s tragic sinking."
-  },
-  {
-    genre: "action",
-    id: "9",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BNGE0YTVjNzUtNzJjOS00NGNlLTgxMzctZTY4YTE1Y2Y1ZTU4XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
-    thumbnail:
-      "https://4kwallpapers.com/images/wallpapers/avengers-hulk-thor-iron-man-captain-america-black-widow-2560x1080-1140.jpg",
-    title: "The Avengers",
-    description:
-      "Earth’s mightiest heroes unite to stop Loki and an alien invasion. Iron Man, Thor, and others must team up to save the world from chaos."
-  },
-  {
-    genre: "action",
-    id: "10",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BNGQ0YTQyYTgtNWI2YS00NTE2LWJmNDItNTFlMTUwNmFlZTM0XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
-    title: "Spider-Man 2",
-    description:
-      "Peter Parker struggles to balance life and heroism as Spider-Man. Facing Dr. Octopus, he fights to save New York while chasing love and purpose."
-  },
-  {
-    genre: "animated",
-    id: "11",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BN2FkMTRkNTUtYTI0NC00ZjI4LWI5MzUtMDFmOGY0NmU2OGY1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
-    title: "Shrek",
-    description:
-      "A grumpy ogre teams with a chatty donkey to rescue a princess for a scheming lord. Their quest flips fairy tales with humor and heart."
-  },
-  {
-    genre: "animated",
-    id: "12",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BZTA3OWVjOWItNjE1NS00NzZiLWE1MjgtZDZhMWI1ZTlkNzYwXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
-    title: "Toy Story",
-    description:
-      "Toys come alive when humans aren’t looking. Woody, a cowboy doll, leads his crew through rivalry and adventure to return to their kid."
-  },
-  {
-    genre: "adventure",
-    id: "13",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BMjIwMjE1Nzc4NV5BMl5BanBnXkFtZTgwNDg4OTA1NzM@._V1_FMjpg_UX1000_.jpg",
-    title: "The Lion King",
-    description:
-      "Young lion Simba flees after his father’s death, unaware of his royal destiny. Guided by friends, he returns to reclaim his place as king."
-  },
-  {
-    genre: "animated",
-    id: "14",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BMTQ1MjQwMTE5OF5BMl5BanBnXkFtZTgwNjk3MTcyMDE@._V1_.jpg",
-    title: "Frozen",
-    description:
-      "Princess Anna journeys to find her sister Elsa, whose icy powers trap their kingdom in winter. Love and courage thaw their bond and land."
-  },
-  {
-    genre: "animated",
-    id: "15",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BNzE3M2I3NDctMTE2OC00ZjMwLWI0NzctZGJiMDQyNWNkYmI3XkEyXkFqcGc@._V1_.jpg",
-    title: "Finding Nemo",
-    description:
-      "A clownfish dad braves the ocean to find his lost son, Nemo. With a forgetful fish friend, he faces dangers in a vibrant underwater quest."
-  }
-]
-
-api.use(function (req, res, next) {
+api.use(bodyParser.json())
+api.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*")
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE")
   res.setHeader("Access-Control-Allow-Headers", "X-Requested-With,content-type")
@@ -160,246 +14,270 @@ api.use(function (req, res, next) {
   next()
 })
 
-api.use(bodyParser.json())
-//NOTE Contact form api
-const contactForms = []
-
-api.post("/api/form", (req, res) => {
-  const newForm = req.body
-
-  if (!newForm || Object.keys(newForm).length === 0) {
-    return res.status(400).json({ error: "Form data is required!" })
-  }
-
-  contactForms.push(newForm)
-  res.status(201).json(newForm)
-})
-//NOTE Movies api
-api.get("/api/movies", (req, res) => {
-  const genre = req.query.genre?.toLowerCase()
-
-  if (!genre || genre === "all") {
-    return res.status(200).json(movies)
-  }
-
-  const filtered = movies.filter(movie => movie.genre.toLowerCase() === genre)
-
-  res.status(200).json(filtered)
-})
-
-api.get("/api/movies/kids", (req, res) => {
-  const kidsMovies = movies.filter(movie => movie.genre.toLowerCase() === "animated")
-
-  res.status(200).json(kidsMovies)
-})
-
-api.get("/api/movies/random", (req, res) => {
-  if (!movies || movies.length === 0) {
-    return res.status(404).json({ error: "No movies available" })
-  }
-
-  const randomIndex = Math.floor(Math.random() * movies.length)
-  const randomMovie = movies[randomIndex]
-  res.json(randomMovie)
-})
-
-api.get("/api/movies/:id", (req, res) => {
-  const movie = movies.find(m => m.id === req.params.id)
-  movie ? res.json(movie) : res.status(404).json({ error: "Movie not found" })
-})
-//NOTE News api
-const newsData = [
-  {
-    title: "New Movie Release!",
-    content: "Don't miss the latest blockbusters releasing this weekend."
-  },
-  {
-    title: "Exclusive Interview",
-    content: "An exclusive interview with the director of the most anticipated movie of the year."
-  }
-]
-
-api.get("/api/news", (req, res) => {
-  res.json(newsData)
-})
-
-// POST route to add news (admin only)
-api.post("/api/news", (req, res) => {
-  const { title, content } = req.body
-
-  if (!title || !content) {
-    return res.status(400).json({ error: "Title and content are required." })
-  }
-
-  // Add to front of the array
-  newsData.unshift({ title, content })
-
-  // Keep only the 3 most recent
-  if (newsData.length > 3) {
-    newsData.length = 3
-  }
-
-  res.json({ success: true, news: newsData })
-})
-
-//NOTE User api
+// Helper imagine default
 function getRandomImage() {
   const images = [
     "https://static-00.iconduck.com/assets.00/profile-circle-icon-2048x2048-cqe5466q.png",
     "https://i.pinimg.com/736x/64/c0/7c/64c07cd56fee2c3b0423168c5b10e58c.jpg",
     "https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png"
   ]
-  const randomIndex = Math.floor(Math.random() * images.length)
-  return images[randomIndex]
+  return images[Math.floor(Math.random() * images.length)]
 }
 
-let users = [
-  {
-    email: "test@blockbuster.com",
-    password: "123456",
-    subscriptionPlan: "Free Plan",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEMzCoyblGoqPIHLfuITVfQ0Pe6snLXFxWpQ&s",
-    isKidsAccount: false,
-    isAdmin: true,
-    cards: [{ number: "1234567890123456", name: "Block Buster", expiration: "12/26", cvc: "123" }]
+// ======================= CONTACT FORM =======================
+api.post("/api/form", async (req, res) => {
+  const data = req.body
+  if (!data || Object.keys(data).length === 0) {
+    return res.status(400).json({ error: "Form data is required!" })
   }
-]
+  try {
+    const created = await ContactForm.create(data)
+    res.status(201).json(created)
+  } catch (err) {
+    console.log(err)
 
-// Helper: find user by email
-const findUser = email => users.find(u => u.email === email)
-
-api.get("/api/user/cards", (req, res) => {
-  const { email } = req.query
-  const user = findUser(email)
-  if (!user) return res.status(404).json({ error: "User not found" })
-  res.json(user.cards)
-})
-
-api.post("/api/user/card", (req, res) => {
-  const { email, card } = req.body
-  const user = findUser(email)
-  if (!user) return res.status(404).json({ error: "User not found" })
-
-  const exists = user.cards.some(c => c.number === card.number)
-  if (exists) return res.status(400).json({ error: "Card already exists" })
-
-  user.cards.push(card)
-  res.status(201).json({ message: "Card added", cards: user.cards })
-})
-
-api.put("/api/user/card/update", (req, res) => {
-  const { email, cardNumber, updatedCard } = req.body
-  const user = findUser(email)
-  if (!user) return res.status(404).json({ error: "User not found" })
-
-  const index = user.cards.findIndex(c => c.number === cardNumber)
-  if (index === -1) return res.status(404).json({ error: "Card not found" })
-
-  user.cards[index] = { ...user.cards[index], ...updatedCard }
-  res.json({ message: "Card updated", card: user.cards[index] })
-})
-
-api.delete("/api/user/card/delete", (req, res) => {
-  const { email, cardNumber } = req.body
-  const user = findUser(email)
-  if (!user) return res.status(404).json({ error: "User not found" })
-
-  const index = user.cards.findIndex(c => c.number === cardNumber)
-  if (index === -1) return res.status(404).json({ error: "Card not found" })
-
-  user.cards.splice(index, 1)
-  res.json({ message: "Card removed", cards: user.cards })
-})
-
-api.put("/api/user/parental", (req, res) => {
-  const { email, isKidsAccount } = req.body
-  const user = findUser(email)
-  if (!user) {
-    return res.status(404).json({ error: "User not found" })
+    res.status(500).json({ error: "Failed to save contact form", details: err.message })
   }
-  user.isKidsAccount = isKidsAccount
-  res.status(200).json({ message: "Setting updated", user })
 })
 
-api.put("/api/user/subscription", (req, res) => {
+// ======================= MOVIES =======================
+api.get("/api/movies", async (req, res) => {
+  const genre = req.query.genre?.toLowerCase()
+  try {
+    const movies = await Movie.findAll({
+      where: genre && genre !== "all" ? { genre } : undefined
+    })
+    res.json(movies)
+  } catch (err) {
+    console.log(err)
+
+    res.status(500).json({ error: "Failed to fetch movies" })
+  }
+})
+
+api.get("/api/movies/kids", async (req, res) => {
+  try {
+    const movies = await Movie.findAll({ where: { genre: "animated" } })
+    res.json(movies)
+  } catch (err) {
+    console.log(err)
+
+    res.status(500).json({ error: "Failed to fetch kids movies" })
+  }
+})
+
+api.get("/api/movies/random", async (req, res) => {
+  try {
+    const movies = await Movie.findAll()
+    if (movies.length === 0) return res.status(404).json({ error: "No movies available" })
+    const randomMovie = movies[Math.floor(Math.random() * movies.length)]
+    res.json(randomMovie)
+  } catch (err) {
+    console.log(err)
+
+    res.status(500).json({ error: "Failed to fetch movie" })
+  }
+})
+
+api.get("/api/movies/:id", async (req, res) => {
+  try {
+    const movie = await Movie.findByPk(req.params.id)
+    if (!movie) return res.status(404).json({ error: "Movie not found" })
+    res.json(movie)
+  } catch (err) {
+    console.log(err)
+
+    res.status(500).json({ error: "Error fetching movie" })
+  }
+})
+
+// ======================= NEWS =======================
+api.get("/api/news", async (req, res) => {
+  try {
+    const news = await News.findAll({ order: [["createdAt", "DESC"]], limit: 3 })
+    res.json(news)
+  } catch (err) {
+    console.log(err)
+
+    res.status(500).json({ error: "Error fetching news" })
+  }
+})
+
+api.post("/api/news", async (req, res) => {
+  const { title, content } = req.body
+  if (!title || !content) return res.status(400).json({ error: "Title and content are required." })
+  try {
+    await News.create({ title, content })
+    const latest = await News.findAll({ order: [["createdAt", "DESC"]], limit: 3 })
+    res.json({ success: true, news: latest })
+  } catch (err) {
+    console.log(err)
+
+    res.status(500).json({ error: "Error creating news" })
+  }
+})
+
+// ======================= USERS =======================
+api.post("/api/user/register", async (req, res) => {
+  const { email, password } = req.body
+  try {
+    const exists = await User.findOne({ where: { email } })
+    if (exists) return res.status(409).json({ error: "User already exists" })
+    const user = await User.create({
+      email,
+      password,
+      subscriptionPlan: "Free Plan",
+      isKidsAccount: false,
+      isAdmin: false,
+      image: getRandomImage()
+    })
+    res.status(201).json(user)
+  } catch (err) {
+    console.log(err)
+
+    res.status(500).json({ error: "Error creating user" })
+  }
+})
+
+api.post("/api/user/login", async (req, res) => {
+  const { email, password } = req.body
+  try {
+    const user = await User.findOne({ where: { email, password } })
+    if (!user) return res.status(401).json({ error: "Invalid email or password" })
+    res.json(user)
+  } catch (err) {
+    console.log(err)
+
+    res.status(500).json({ error: "Login error" })
+  }
+})
+
+api.delete("/api/user/delete", async (req, res) => {
+  const { email, password } = req.body
+  try {
+    const user = await User.findOne({ where: { email } })
+    if (!user) return res.status(404).json({ error: "User not found" })
+    if (user.password !== password) return res.status(401).json({ error: "Incorrect password" })
+    await user.destroy()
+    res.json({ message: "User deleted successfully" })
+  } catch (err) {
+    console.log(err)
+
+    res.status(500).json({ error: "Delete failed" })
+  }
+})
+
+api.put("/api/user/subscription", async (req, res) => {
   const { email, subscriptionPlan } = req.body
+  try {
+    const user = await User.findOne({ where: { email } })
+    if (!user) return res.status(404).json({ error: "User not found" })
+    user.subscriptionPlan = subscriptionPlan
+    await user.save()
+    res.json({ message: "Subscription updated", user })
+  } catch (err) {
+    console.log(err)
 
-  const user = findUser(email)
-
-  if (!user) {
-    return res.status(404).json({ error: "User not found" })
+    res.status(500).json({ error: "Failed to update subscription" })
   }
-
-  user.subscriptionPlan = subscriptionPlan
-  res.status(200).json({ message: "Subscription updated", user })
 })
 
-api.put("/api/user/image", (req, res) => {
+api.put("/api/user/image", async (req, res) => {
   const { email, newImageUrl } = req.body.data
+  try {
+    const user = await User.findOne({ where: { email } })
+    if (!user) return res.status(404).json({ error: "User not found" })
+    user.image = newImageUrl
+    await user.save()
+    res.json({ message: "Image updated", user })
+  } catch (err) {
+    console.log(err)
 
-  const user = findUser(email)
-
-  if (!user) {
-    return res.status(404).json({ error: "User not found" })
+    console.log(err)
+    res.status(500).json({ error: "Failed to update image" })
   }
-
-  user.image = newImageUrl
-
-  res.status(200).json({ message: "Image updated", user })
 })
 
-api.post("/api/user/register", (req, res) => {
-  const { email, password } = req.body
+api.put("/api/user/parental", async (req, res) => {
+  const { email, isKidsAccount } = req.body
+  try {
+    const user = await User.findOne({ where: { email } })
+    if (!user) return res.status(404).json({ error: "User not found" })
+    user.isKidsAccount = isKidsAccount
+    await user.save()
+    res.json({ message: "Parental setting updated", user })
+  } catch (err) {
+    console.log(err)
 
-  const existingUser = findUser(email)
-  if (existingUser) {
-    return res.status(409).json({ error: "User already exists" })
-  }
+    console.log(err)
 
-  const newUser = {
-    email,
-    password,
-    subscriptionPlan: "Free Plan",
-    isKidsAccount: false,
-    isAdmin: false,
-    image: getRandomImage(),
-    cards: []
+    res.status(500).json({ error: "Failed to update parental controls" })
   }
-  users.push(newUser)
-  res.status(201).json(newUser)
 })
 
-api.delete("/api/user/delete", (req, res) => {
-  const { email, password } = req.body
+// ======================= CARD MANAGEMENT =======================
+api.get("/api/user/cards", async (req, res) => {
+  const { email } = req.query
+  try {
+    const user = await User.findOne({ where: { email }, include: Card })
+    if (!user) return res.status(404).json({ error: "User not found" })
+    res.json(user.Cards)
+  } catch (err) {
+    console.log(err)
 
-  const userIndex = users.findIndex(user => user.email === email)
-  if (userIndex === -1) {
-    return res.status(404).json({ error: "User not found" })
+    res.status(500).json({ error: "Error fetching cards" })
   }
-
-  const user = users[userIndex]
-  if (user.password !== password) {
-    return res.status(401).json({ error: "Incorrect password" })
-  }
-
-  users.splice(userIndex, 1)
-
-  return res.status(200).json({ message: "User deleted successfully" })
 })
 
-api.post("/api/user/login", (req, res) => {
-  const { email, password } = req.body
+api.post("/api/user/card", async (req, res) => {
+  const { email, card } = req.body
+  try {
+    const user = await User.findOne({ where: { email } })
+    if (!user) return res.status(404).json({ error: "User not found" })
+    const exists = await Card.findOne({ where: { number: card.number, UserId: user.id } })
+    if (exists) return res.status(400).json({ error: "Card already exists" })
+    const newCard = await Card.create({ ...card, UserId: user.id })
+    res.status(201).json({ message: "Card added", card: newCard })
+  } catch (err) {
+    console.log(err)
 
-  const user = users.find(user => user.email === email && user.password === password)
-
-  if (!user) {
-    return res.status(401).json({ error: "Invalid email or password" })
+    res.status(500).json({ error: "Failed to add card" })
   }
-
-  res.status(200).json(user)
 })
 
-api.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+api.put("/api/user/card/update", async (req, res) => {
+  const { email, cardNumber, updatedCard } = req.body
+  try {
+    const user = await User.findOne({ where: { email } })
+    const card = await Card.findOne({ where: { number: cardNumber, UserId: user.id } })
+    if (!card) return res.status(404).json({ error: "Card not found" })
+    await card.update(updatedCard)
+    res.json({ message: "Card updated", card })
+  } catch (err) {
+    console.log(err)
+
+    res.status(500).json({ error: "Failed to update card" })
+  }
+})
+
+api.delete("/api/user/card/delete", async (req, res) => {
+  const { email, cardNumber } = req.body
+  try {
+    const user = await User.findOne({ where: { email } })
+    const card = await Card.findOne({ where: { number: cardNumber, UserId: user.id } })
+    if (!card) return res.status(404).json({ error: "Card not found" })
+    await card.destroy()
+    res.json({ message: "Card removed" })
+  } catch (err) {
+    console.log(err)
+
+    res.status(500).json({ error: "Failed to delete card" })
+  }
+})
+
+// ======================= PORNEȘTE SERVERUL =======================
+sequelize.sync().then(() => {
+  api.listen(port, () => {
+    console.log(`Server running on port ${port}`)
+  })
 })
