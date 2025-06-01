@@ -81,10 +81,8 @@ api.get("/api/movies/random", async (req, res) => {
 
 api.get("/api/movies/:id", async (req, res) => {
   const id = req.params.id
-  console.log("Looking for movie with id:", id)
   try {
     const movie = await Movie.findOne({ where: { id } })
-    console.log("Movie result:", movie)
     if (!movie) return res.status(404).json({ error: "Movie not found" })
     res.json(movie)
   } catch (err) {
