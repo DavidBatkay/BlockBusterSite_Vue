@@ -20,7 +20,7 @@ export const useBlockbusterStore = defineStore("movies", {
         const res = await axios.get(`${url}/api/movies`)
         this.movies = res.data
 
-        const selected = this.movies.find(m => m.id === movieId)
+        const selected = this.movies.find(m => m.id === Number(movieId))
         if (!selected) throw new Error("Selected movie not found.")
 
         this.selectedMovie = selected
@@ -30,7 +30,12 @@ export const useBlockbusterStore = defineStore("movies", {
         this.similarMovies = similar.slice(0, 3)
       } catch (err) {
         console.error("Failed to fetch movie:", err)
-        this.error = "Failed to fetch movie. Please try again later."
+
+        if (err.message === "Selected movie not found.") {
+          this.error = "That movie doesn't exist."
+        } else {
+          this.error = "Failed to fetch movie. Please try again later."
+        }
       } finally {
         this.loading = false
       }

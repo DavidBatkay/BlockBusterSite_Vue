@@ -41,7 +41,7 @@
       </select>
 
       <textarea
-        v-model="form.issueDescription"
+        v-model="form.message"
         placeholder="Describe your issue..."
         rows="4"
         required
@@ -69,7 +69,7 @@ const form = ref({
   lastName: "",
   email: "",
   issueCategory: "",
-  issueDescription: ""
+  message: ""
 })
 
 const submitForm = async () => {
@@ -80,7 +80,7 @@ const submitForm = async () => {
       lastName: "",
       email: "",
       issueCategory: "",
-      issueDescription: ""
+      message: ""
     }
     alert("Form submitted!")
   } catch (error) {

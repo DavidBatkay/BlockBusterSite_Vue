@@ -25,6 +25,11 @@ export const Card = sequelize.define("Card", {
 })
 
 export const Movie = sequelize.define("Movie", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
   title: DataTypes.STRING,
   genre: DataTypes.STRING,
   image: DataTypes.STRING,
@@ -38,8 +43,10 @@ export const News = sequelize.define("News", {
 })
 
 export const ContactForm = sequelize.define("ContactForm", {
-  name: DataTypes.STRING,
+  firstName: DataTypes.STRING,
+  lastName: DataTypes.STRING,
   email: DataTypes.STRING,
+  issueCategory: DataTypes.STRING,
   message: DataTypes.TEXT
 })
 

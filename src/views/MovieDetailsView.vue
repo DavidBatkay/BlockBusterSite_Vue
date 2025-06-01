@@ -10,7 +10,7 @@ const userStore = useUserStore()
 const store = useBlockbusterStore()
 const movieId = ref(route.params.id)
 const handleFetchMovie = async () => {
-  await store.fetchMovie(route.params.id)
+  await store.fetchMovie(Number(movieId.value))
 }
 onMounted(() => {
   handleFetchMovie()

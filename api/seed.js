@@ -23,7 +23,6 @@ await Card.create({
 const moviesData = [
   {
     genre: "action",
-    id: "1",
     image:
       "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_FMjpg_UX1000_.jpg",
     thumbnail: "https://images.static-bluray.com/reviews/3549_1.jpg",
@@ -33,7 +32,6 @@ const moviesData = [
   },
   {
     genre: "thriller",
-    id: "2",
     image:
       "https://m.media-amazon.com/images/M/MV5BYzdjMDAxZGItMjI2My00ODA1LTlkNzItOWFjMDU5ZDJlYWY3XkEyXkFqcGc@._V1_.jpg",
     thumbnail:
@@ -45,7 +43,6 @@ const moviesData = [
   },
   {
     genre: "action",
-    id: "3",
     image:
       "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_FMjpg_UX1000_.jpg",
     thumbnail:
@@ -56,7 +53,6 @@ const moviesData = [
   },
   {
     genre: "sci-fi",
-    id: "4",
     image:
       "https://m.media-amazon.com/images/M/MV5BMDEzMmQwZjctZWU2My00MWNlLWE0NjItMDJlYTRlNGJiZjcyXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
     thumbnail: "https://i0.wp.com/jasonsmovieblog.com/wp-content/uploads/2022/12/TDyLzgA.jpg",
@@ -66,7 +62,6 @@ const moviesData = [
   },
   {
     genre: "action",
-    id: "5",
     image:
       "https://m.media-amazon.com/images/M/MV5BN2NmN2VhMTQtMDNiOS00NDlhLTliMjgtODE2ZTY0ODQyNDRhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
     thumbnail: "https://4kwallpapers.com/images/walls/thumbs_3t/15947.jpg",
@@ -76,7 +71,6 @@ const moviesData = [
   },
   {
     genre: "adventure",
-    id: "6",
     image:
       "https://m.media-amazon.com/images/M/MV5BMjM2MDgxMDg0Nl5BMl5BanBnXkFtZTgwNTM2OTM5NDE@._V1_.jpg",
     title: "Jurassic Park",
@@ -85,7 +79,6 @@ const moviesData = [
   },
   {
     genre: "animated",
-    id: "7",
     image:
       "https://m.media-amazon.com/images/M/MV5BYzdjY2VmZDgtMWFlOS00NjAyLWIyYzQtMjNjNzY3YTgxODRjXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
     title: "Bakugan Battle Brawlers",
@@ -94,7 +87,6 @@ const moviesData = [
   },
   {
     genre: "drama",
-    id: "8",
     image: "http://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg",
     title: "Titanic",
     description:
@@ -102,7 +94,6 @@ const moviesData = [
   },
   {
     genre: "action",
-    id: "9",
     image:
       "https://m.media-amazon.com/images/M/MV5BNGE0YTVjNzUtNzJjOS00NGNlLTgxMzctZTY4YTE1Y2Y1ZTU4XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
     thumbnail:
@@ -113,7 +104,6 @@ const moviesData = [
   },
   {
     genre: "action",
-    id: "10",
     image:
       "https://m.media-amazon.com/images/M/MV5BNGQ0YTQyYTgtNWI2YS00NTE2LWJmNDItNTFlMTUwNmFlZTM0XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
     title: "Spider-Man 2",
@@ -122,7 +112,6 @@ const moviesData = [
   },
   {
     genre: "animated",
-    id: "11",
     image:
       "https://m.media-amazon.com/images/M/MV5BN2FkMTRkNTUtYTI0NC00ZjI4LWI5MzUtMDFmOGY0NmU2OGY1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
     title: "Shrek",
@@ -131,7 +120,6 @@ const moviesData = [
   },
   {
     genre: "animated",
-    id: "12",
     image:
       "https://m.media-amazon.com/images/M/MV5BZTA3OWVjOWItNjE1NS00NzZiLWE1MjgtZDZhMWI1ZTlkNzYwXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
     title: "Toy Story",
@@ -140,7 +128,6 @@ const moviesData = [
   },
   {
     genre: "adventure",
-    id: "13",
     image:
       "https://m.media-amazon.com/images/M/MV5BMjIwMjE1Nzc4NV5BMl5BanBnXkFtZTgwNDg4OTA1NzM@._V1_FMjpg_UX1000_.jpg",
     title: "The Lion King",
@@ -149,7 +136,6 @@ const moviesData = [
   },
   {
     genre: "animated",
-    id: "14",
     image:
       "https://m.media-amazon.com/images/M/MV5BMTQ1MjQwMTE5OF5BMl5BanBnXkFtZTgwNjk3MTcyMDE@._V1_.jpg",
     title: "Frozen",
@@ -158,7 +144,6 @@ const moviesData = [
   },
   {
     genre: "animated",
-    id: "15",
     image:
       "https://m.media-amazon.com/images/M/MV5BNzE3M2I3NDctMTE2OC00ZjMwLWI0NzctZGJiMDQyNWNkYmI3XkEyXkFqcGc@._V1_.jpg",
     title: "Finding Nemo",
