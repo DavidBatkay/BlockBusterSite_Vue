@@ -154,15 +154,28 @@ api.post("/api/user/login", async (req, res) => {
 
 api.delete("/api/user/delete", async (req, res) => {
   const { email, password } = req.body
+  const t = await sequelize.transaction()
   try {
-    const user = await User.findOne({ where: { email } })
-    if (!user) return res.status(404).json({ error: "User not found" })
-    if (user.password !== password) return res.status(401).json({ error: "Incorrect password" })
-    await user.destroy()
-    res.json({ message: "User deleted successfully" })
+    const user = await User.findOne({ where: { email }, transaction: t })
+    if (!user) {
+      await t.rollback()
+      return res.status(404).json({ error: "User not found" })
+    }
+    if (user.password !== password) {
+      await t.rollback()
+      return res.status(401).json({ error: "Incorrect password" })
+    }
+
+    // Delete all cards associated with this user
+    await Card.destroy({ where: { UserId: user.id }, transaction: t })
+    // Delete the user
+    await user.destroy({ transaction: t })
+
+    await t.commit()
+    res.json({ message: "User and associated cards deleted successfully" })
   } catch (err) {
     console.log(err)
-
+    await t.rollback()
     res.status(500).json({ error: "Delete failed" })
   }
 })
