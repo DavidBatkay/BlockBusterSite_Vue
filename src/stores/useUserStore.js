@@ -182,7 +182,11 @@ export const useUserStore = defineStore("user", {
           email: this.user.email,
           subscriptionPlan: newPlan
         })
-        this.user = res.data.user
+
+        this.user = {
+          ...this.user,
+          ...res.data.user
+        }
       } catch (err) {
         console.error("Subscription update failed:", err)
         this.error = "Failed to update subscription"
